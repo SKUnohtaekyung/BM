@@ -168,3 +168,14 @@ No readable text, no logo, no complex background, no realistic human face.
 ```text
 Avoid photorealistic style, complex background, colorful rainbow palette, neon cyberpunk, anime style, flat vector illustration, hand-drawn sketch, 8-bit pixel art, cluttered interface, readable text, Korean text, distorted letters, logos, watermarks, realistic brand UI, excessive shadows, harsh gradients, dark heavy mood, detailed human faces.
 ```
+
+---
+
+## 16주차 BM 강의 덱 — 슬라이드별 프롬프트
+
+위 라이브러리(공통 베이스·네거티브·톤)를 기준으로, 16주차 BM 강의 PPT **22장 각각에 맞춘 슬라이드별 이미지 프롬프트**는 별도 파일에서 관리한다 → [`슬라이드/이미지프롬프트_BM덱.md`](슬라이드/이미지프롬프트_BM덱.md)
+
+- 도구: **GPT 이미지 생성** · 형식: **투명 배경 PNG** · 정사각 1:1 권장.
+- 22장이 한 세트로 보이도록 **고정 스타일 계약**(팔레트·재질·아이소메트릭 시점·조명·투명배경)을 모든 프롬프트가 공유한다.
+- 오렌지는 경고/위험 맥락(S15 가장 위험한 가정, S19 틀린 표현)에만 사용한다.
+- 각 프롬프트는 그 슬라이드의 핵심 메시지를 보조하도록 설계됐고, 일관성 비평을 거쳐 중복 구도(코인 강조·3×3 보드 등)는 차별화 반영했다.

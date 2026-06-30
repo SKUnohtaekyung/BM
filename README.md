@@ -39,7 +39,8 @@
 |---|---|
 | [`design.md`](design.md) | 색상·타이포·레이아웃·이미지 디자인 가이드 |
 | [`ppt_layout_reference.md`](ppt_layout_reference.md) | 재사용 슬라이드 레이아웃 30종(L01~L30) |
-| [`image_generation_prompts.md`](image_generation_prompts.md) | 3D 에셋 AI 이미지 생성 프롬프트 |
+| [`image_generation_prompts.md`](image_generation_prompts.md) | 3D 에셋 AI 이미지 생성 프롬프트(공통 라이브러리) |
+| [`슬라이드/이미지프롬프트_BM덱.md`](슬라이드/이미지프롬프트_BM덱.md) | 덱 22장 **슬라이드별** 이미지 프롬프트 (GPT image gen · 투명 PNG) |
 | [`슬라이드/BM_16주차_강의덱.pptx`](슬라이드/BM_16주차_강의덱.pptx) | 위 시스템으로 만든 **강의 PPT (22장 · 발표자 노트 포함)** |
 | [`슬라이드/build_deck.js`](슬라이드/build_deck.js) | 덱 재생성용 pptxgenjs 스크립트 |
 
