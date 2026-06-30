@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>비즈니스 모델과 수익 모델 정리본</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --paper: #ffffff;
+      --ink: #141821;
+      --muted: #5f6878;
+      --line: #e5e8f0;
+      --navy: #102a56;
+      --blue: #3157ff;
+      --blue-soft: #eef2ff;
+      --orange: #ff6b3d;
+      --orange-soft: #fff1ea;
+      --green: #0f766e;
+      --green-soft: #e8f7f5;
+      --yellow-soft: #fff8db;
+      --red: #b42318;
+      --red-soft: #fff1f0;
+      --code: #f3f5f9;
+      --radius: 18px;
+      --shadow: 0 18px 48px rgba(20, 24, 33, .08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(49,87,255,.12), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255,107,61,.10), transparent 28rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      line-height: 1.72;
+      letter-spacing: -0.02em;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .layout {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 72px;
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    aside {
+      position: sticky;
+      top: 22px;
+      height: fit-content;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    aside .mini-title {
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+
+    aside nav a {
+      display: block;
+      padding: 9px 10px;
+      margin: 2px 0;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    aside nav a:hover {
+      background: var(--blue-soft);
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #f7f9ff 64%, #fff3ed 100%);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 42px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero:after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -90px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(49,87,255,.18), transparent 68%);
+    }
+
+    .kicker {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.12;
+      letter-spacing: -0.055em;
+      margin: 0 0 18px;
+      color: var(--navy);
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .stat-card b {
+      display: block;
+      color: var(--navy);
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stat-card.focus {
+      border-color: #ffd9c7;
+      background: linear-gradient(180deg, #fff7f3, #ffffff);
+    }
+
+    .stat-card .focus-tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #b9471e;
+      background: var(--orange-soft);
+      border-radius: 999px;
+      padding: 3px 8px;
+    }
+
+    section {
+      margin-top: 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 20px;
+      color: #202736;
+      letter-spacing: -0.035em;
+    }
+
+    p { margin: 0 0 14px; }
+    ul, ol { padding-left: 1.25em; }
+    li { margin: 5px 0; }
+
+    .callout {
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin: 18px 0;
+      border: 1px solid var(--line);
+      background: #fbfcff;
+    }
+
+    .callout strong { color: var(--navy); }
+
+    .callout.blue {
+      background: var(--blue-soft);
+      border-color: #dce4ff;
+    }
+
+    .callout.orange {
+      background: var(--orange-soft);
+      border-color: #ffd9c7;
+    }
+
+    .callout.green {
+      background: var(--green-soft);
+      border-color: #c9ebe6;
+    }
+
+    .callout.yellow {
+      background: var(--yellow-soft);
+      border-color: #f3e5a6;
+    }
+
+    .callout.red {
+      background: var(--red-soft);
+      border-color: #ffd0cc;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 6px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .flow .step {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: #fff;
+      position: relative;
+    }
+
+    .flow .step:after {
+      content: "→";
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aab2c1;
+      font-weight: 900;
+    }
+
+    .flow .step:last-child:after { display: none; }
+    .step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--navy);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 16px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 13px 14px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f2f5fb;
+      color: var(--navy);
+      font-weight: 850;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td {
+      background: #fcfdff;
+    }
+
+    .model-table td:nth-child(1),
+    .model-table td:nth-child(2) {
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .model-chip {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--orange-soft);
+      color: #b9471e;
+      margin-bottom: 4px;
+    }
+
+    .formula {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      background: var(--code);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0;
+    }
+
+    .checklist li {
+      position: relative;
+      padding: 11px 12px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 8px 0;
+      background: #fff;
+    }
+
+    .checklist li:before {
+      content: "✓";
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      width: 20px;
+      height: 20px;
+      border-radius: 7px;
+      background: var(--green-soft);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .source-list {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .source-list li {
+      margin-bottom: 8px;
+    }
+
+    .timing {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 999px;
+      padding: 5px 12px;
+      margin: 0 0 10px;
+    }
+
+    .lead {
+      display: block;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .hot {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--orange-soft);
+      color: #b9471e;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .quote {
+      border-left: 4px solid var(--blue);
+      background: #f7f9ff;
+      border-radius: 0 14px 14px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    details.adv {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 8px 16px;
+      margin: 16px 0;
+      background: #fbfcff;
+    }
+
+    details.adv summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--navy);
+      padding: 6px 0;
+    }
+
+    details.adv[open] summary { margin-bottom: 8px; }
+
+    .print-break {
+      page-break-before: always;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; }
+      .hero-grid, .grid-2, .grid-3, .flow { grid-template-columns: 1fr; }
+      .flow .step:after { display: none; }
+      section, .hero { padding: 24px; }
+      table { display: block; overflow-x: auto; white-space: normal; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .layout { display: block; max-width: none; padding: 0; }
+      aside { display: none; }
+      .hero, section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+        margin-top: 18px;
+      }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="mini-title">비즈니스 모델 &amp; 수익 모델<br/>정리본 · 16주차 BM</div>
+      <nav>
+        <a href="#why">0. 왜 BM을 알아야 할까</a>
+        <a href="#concept">1. 비즈니스 모델 vs 수익 모델</a>
+        <a href="#models">2. 15개 수익 모델</a>
+        <a href="#warmup">3. 워밍업: 역기획</a>
+        <a href="#choose">4. 수익 모델 고르는 법</a>
+        <a href="#leancanvas">5. 본실습: 팀 린캔버스</a>
+        <a href="#metrics">6. 검증 핵심 지표</a>
+        <a href="#pricing">7. 가격 전략 (맛보기)</a>
+        <a href="#mistakes">8. 흔한 오해</a>
+        <a href="#lecture">9. 강의 운영안</a>
+        <a href="#sources">10. 출처·검증 메모</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="hero">
+        <div class="kicker">멋쟁이사자처럼 UXUI · 기획 파트 · 16주차 BM 세션</div>
+        <h1>비즈니스 모델과<br/>수익 모델 이해하기</h1>
+        <p class="subtitle">
+          한 줄 목표 — <strong>“우리가 만든 서비스, 이거 어떻게 돈 벌어요?”</strong> 라는 질문에 기획자로서 답할 수 있게 되기.
+          좋은 기획은 화면을 잘 그리는 데서 끝나지 않습니다. 왜 쓰이고, 왜 돈을 낼 만하고, 어떻게 유지되는지까지 설명할 수 있어야 합니다.
+        </p>
+
+        <div class="pill-row">
+          <span class="pill">대상 · 기획을 막 배우는 아기사자</span>
+          <span class="pill">세션 60~80분</span>
+          <span class="pill">3명씩 2팀 · 팀 실습 중심</span>
+        </div>
+
+        <div class="hero-grid">
+          <div class="stat-card">
+            <b>가치</b>
+            <span>왜 쓰이는가</span>
+          </div>
+          <div class="stat-card focus">
+            <b>수익</b>
+            <span>왜 돈을 낼 만한가</span>
+            <span class="focus-tag">오늘의 초점</span>
+          </div>
+          <div class="stat-card">
+            <b>비용</b>
+            <span>어떻게 유지되는가</span>
+          </div>
+        </div>
+      </header>
+
+      <section id="why">
+        <h2>0. 왜 기획자가 ‘돈 버는 구조’를 알아야 할까</h2>
+        <p>
+          여러분은 이미 아이디어톤에서 서비스를 <strong>하나 만들어봤고</strong>, 곧 해커톤에서 <strong>또 만들 겁니다.</strong>
+          그런데 발표 때 누군가 이렇게 묻습니다.
+        </p>
+
+        <div class="quote">“그래서 이거… 어떻게 돈 벌어요?”</div>
+
+        <p>
+          이 질문에 “음… 광고 붙이면 되지 않을까요?”라고 답하는 순간, 기획이 절반만 끝난 게 들통납니다.
+        </p>
+
+        <ul>
+          <li><strong>1주차 역기획 마지막 단계</strong>를 떠올려보세요. “기획자가 <strong>수익을 발생시키려 설계한 장치는 어디 있나?</strong>”를 찾아봤죠.</li>
+          <li>그때는 “장치가 어디 있나”까지만 봤습니다. 오늘은 그 장치가 <strong>무슨 종류이고, 왜 그걸 골랐고, 우리 서비스엔 뭐가 맞는지</strong>까지 갑니다.</li>
+        </ul>
+
+        <div class="callout blue">
+          <strong>💡 이 세션의 결론 먼저</strong><br/>
+          좋은 기획은 화면을 잘 그리는 데서 끝나지 않습니다. <strong>“이 서비스가 왜 쓰이고(가치), 왜 돈을 낼 만하고(수익), 어떻게 유지되는가(비용)”</strong>
+          까지 설명할 수 있어야 합니다. 오늘은 그중 <strong>돈</strong> 부분을 책임집니다.
+        </div>
+      </section>
+
+      <section id="concept">
+        <h2>1. 비즈니스 모델 vs 수익 모델</h2>
+        <p>이름이 비슷해서 헷갈리지만, 둘은 <strong>포함 관계</strong>입니다.</p>
+
+        <div class="callout green">
+          <strong>✅ 기억 공식</strong><br/>
+          <strong>비즈니스 모델</strong> = 고객 + 문제 + 가치 + 전달 방식 + 비용 구조 + 수익 구조 (사업 전체의 작동 방식)<br/>
+          <strong>수익 모델</strong> = 그중 “돈이 들어오는 방식” 한 조각 (구독·광고·수수료…)
+        </div>
+
+        <p>
+          여러분이 2주차에 배운 <strong>Why–Who–What–How</strong>가 비즈니스 모델의 뼈대입니다.
+          비즈니스 모델은 거기에 <strong>“그래서 어떻게 지속되는가(돈·비용)”</strong>를 더한 것이고, 수익 모델은 그 마지막 칸 하나라고 보면 됩니다.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>개념</th>
+              <th>핵심 질문</th>
+              <th>쉬운 비유</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>비즈니스 모델</strong></td>
+              <td>이 사업은 어떻게 작동하고 지속되는가?</td>
+              <td>가게 전체 운영 설계도</td>
+            </tr>
+            <tr>
+              <td><strong>수익 모델</strong></td>
+              <td>돈은 누구에게서 어떤 방식으로 들어오는가?</td>
+              <td>계산대에서 돈 받는 방식</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>예시: AI 마케팅 서비스</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>비즈니스 모델</td>
+              <td>외식업 사장님의 리뷰·고객 데이터를 분석해 홍보 콘텐츠 생성을 돕는 AI 마케팅 비서</td>
+            </tr>
+            <tr>
+              <td>수익 모델</td>
+              <td>월 구독료 + 영상 생성 건당 과금 + 프리미엄 리포트 판매</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout green">
+          <span class="lead">🗣️ 조별 토론 (2분)</span>
+          “우리 비즈니스 모델은 <strong>구독</strong>입니다.” — 이 문장, 어디가 어색할까요?<br/>
+          <span class="note">(힌트: 구독은 ‘돈 받는 방식’일 뿐, 누구의 무슨 문제를 푸는지가 빠졌죠.)</span>
+        </div>
+      </section>
+
+      <section id="models" class="print-break">
+        <h2>2. 15개의 수익 모델</h2>
+        <p>
+          서비스가 돈을 버는 방식은 사실 <strong>거의 정해져 있습니다.</strong> 새로 발명하기보다, 이미 있는 구조 중 우리 서비스에 맞는 걸
+          <strong>고르고 섞는</strong> 일에 가깝습니다. (실제로 대부분 서비스는 2~3개를 조합합니다.)
+        </p>
+
+        <div class="callout">
+          📄 아래 표는 <strong>외워야 할 목록이 아니라 ‘고를 때 펼쳐 보는 메뉴판’</strong>입니다. 유인물로 두고 실습 때 참고하세요.
+        </div>
+
+        <table class="model-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>수익 모델</th>
+              <th>한 줄 뜻</th>
+              <th>잘 맞는 서비스</th>
+              <th>봐야 할 숫자</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>구독형</td><td>월·연 단위 반복 결제</td><td>SaaS, OTT, 뉴스레터</td><td>반복 매출, 이탈률</td></tr>
+            <tr><td>2</td><td>프리미엄(Freemium)</td><td>기본 무료, 고급 유료</td><td>생산성·협업·디자인 툴</td><td>무료→유료 전환율</td></tr>
+            <tr><td>3</td><td>기부·후원형</td><td>팬·사용자의 자발적 후원</td><td>창작자, 커뮤니티, 오픈소스</td><td>후원액, 후원 지속률</td></tr>
+            <tr><td>4</td><td>광고형</td><td>사용자는 무료, 광고주가 지불</td><td>미디어, 검색, SNS</td><td>트래픽(DAU/MAU), CTR</td></tr>
+            <tr><td>5</td><td>거래 수수료형</td><td>거래 성사 시 일정 비율 수취</td><td>마켓플레이스, 배달앱</td><td>거래액(GMV), 수수료율</td></tr>
+            <tr><td>6</td><td>제휴(어필리에이트)형</td><td>고객을 보내주고 소개료</td><td>리뷰·추천 콘텐츠, 블로그</td><td>전환율, 전환당 수익</td></tr>
+            <tr><td>7</td><td>직접판매형</td><td>제품·콘텐츠를 직접 판매</td><td>전자책, 강의, 굿즈</td><td>객단가, 재구매율</td></tr>
+            <tr><td>8</td><td>인앱 구매형</td><td>앱 안에서 아이템·기능 개별 구매</td><td>게임, AI 앱, 콘텐츠 앱</td><td>결제자 비율, 결제자당 매출</td></tr>
+            <tr><td>9</td><td>라이선스형</td><td>기술·콘텐츠·IP 사용권 판매</td><td>폰트, 캐릭터, 엔진, 특허</td><td>계약 수, 갱신률</td></tr>
+            <tr><td>10</td><td>화이트라벨·OEM</td><td>내 제품을 남의 브랜드로 공급</td><td>B2B 솔루션, API 제품</td><td>파트너 수, 유지율</td></tr>
+            <tr><td>11</td><td>종량제</td><td>쓴 만큼 지불</td><td>클라우드, API, AI 토큰</td><td>사용량, 단위 원가</td></tr>
+            <tr><td>12</td><td>면도기-면도날형</td><td>본체는 싸게, 소모품에서 수익</td><td>프린터·잉크, 캡슐커피</td><td>소모품 재구매율</td></tr>
+            <tr><td>13</td><td>성과보수형</td><td>결과가 나왔을 때만 청구</td><td>채용, 광고 대행, 리드 생성</td><td>성과 발생률, 건당 수익</td></tr>
+            <tr><td>14</td><td>데이터 판매형</td><td>쌓인 데이터를 리포트·API로</td><td>상권 분석, 시장 리포트</td><td>데이터 품질, 구매 반복률</td></tr>
+            <tr><td>15</td><td>렌탈·대여형</td><td>소유가 아니라 기간 사용권</td><td>차량, 장비, 공간, 의류</td><td>가동률, 회수 기간</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout orange">
+          <strong>🔶 핵심 한 문장</strong><br/>
+          수익 모델은 <strong>발명이 아니라 선택과 조합</strong>입니다. “우리 고객이 어떻게 행동하고, 얼마나 자주 쓰고, 우리 원가가 어떤가”에 맞는 걸 고르는 거예요.
+        </div>
+      </section>
+
+      <section id="warmup">
+        <h2>3. 워밍업: 역기획으로 수익 포인트 읽기</h2>
+        <span class="timing">⏱️ 전체 함께 · 약 5분</span>
+        <p>본실습 전에 “수익 모델 분류”에 감을 잡는 단계입니다.</p>
+        <p>
+          1주차 역기획 5질문, 기억나죠? 그 마지막 질문(<strong>⑤ 수익 포인트 발견</strong>)을 오늘 한 발 더 밀고 갑니다.
+          다 같이 <strong>모두가 아는 앱 1개</strong>(예: 배달의민족, 토스, 유튜브, 당근)를 떠올리고 답해봅시다.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>단계</th>
+              <th>질문</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>① 수익 포인트</td><td>이 앱에서 <strong>돈이 발생하는 지점</strong>은 어디인가?</td></tr>
+            <tr><td>② 모델 분류</td><td>그건 위 <strong>15개 중 무엇</strong>인가? (하나가 아닐 수 있음)</td></tr>
+            <tr><td>③ 근거</td><td>이 서비스엔 <strong>왜 그 모델이 맞을까?</strong></td></tr>
+            <tr><td>④ 지불 주체</td><td>돈 내는 사람이 <strong>앱 쓰는 사람과 같은가, 다른가?</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout green">
+          <span class="lead">🗣️ 예시</span>
+          배달의민족 → ⑤수익 포인트 = 주문/광고 → ②거래 수수료형 + 광고형 → ④돈 내는 사람은 <em>가게 사장님</em>(쓰는 사람은 손님!)
+          ← 이 ‘지불 주체가 다르다’는 감각이 오늘의 핵심 중 하나입니다.
+        </div>
+      </section>
+
+      <section id="choose">
+        <h2>4. 수익 모델은 어떻게 고르는가</h2>
+        <p>
+          “돈 될 것 같은 방식”이 아니라 <strong>“고객 행동과 비용 구조에 맞는 방식”</strong>을 골라야 합니다.
+          아래 5개 질문이 ‘억지 수익 모델’을 걸러주는 체크리스트입니다.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>판단 기준</th>
+              <th>확인 질문</th>
+              <th>잘 맞는 수익 모델</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>사용 빈도</td><td>매일·매주 반복해서 쓰나?</td><td>구독형, 프리미엄, 인앱 구매형</td></tr>
+            <tr><td><strong>지불 주체</strong></td><td><strong>사용자가 내나, 제3자가 내나?</strong></td><td>직접판매형 / 광고형·제휴형</td></tr>
+            <tr><td>가치 발생 시점</td><td>쓰는 순간 가치? 결과가 나와야 가치?</td><td>종량제 / 성과보수형</td></tr>
+            <tr><td>원가 구조</td><td>사용량 늘수록 서버·AI 비용도 느나?</td><td>종량제, 하이브리드 구독</td></tr>
+            <tr><td>반복성</td><td>한 번 팔고 끝? 계속 받을 수 있나?</td><td>구독형, 렌탈형, 면도기-면도날형</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout blue">
+          <strong>💡 꼭 기억할 질문 하나: “돈 내는 사람 = 쓰는 사람인가?”</strong><br/>
+          2주차에 만든 <strong>페르소나</strong>가 정말 <em>돈을 내는 사람</em>인지 확인하세요. 광고형·B2B는 “쓰는 사람”과 “내는 사람”이 다릅니다.
+          이걸 놓치면 수익 모델이 통째로 어긋납니다.
+        </div>
+      </section>
+
+      <section id="leancanvas" class="print-break">
+        <h2>5. 본실습: 팀 린캔버스 만들기</h2>
+        <span class="timing">⏱️ 3명씩 2팀 · 프로젝트 선정 3분 + 작성 약 22분</span>
+        <p>혼자 채우지 말고, <strong>같이 토론하며</strong> 한 장을 완성합니다.</p>
+
+        <h3>5-1. 린캔버스란?</h3>
+        <p>
+          비즈니스 모델 전체를 <strong>한 장(9칸)</strong>에 정리하는 도구입니다.
+          (9칸을 더 자세히 쓰는 버전이 ‘BMC’이고, 초기 아이디어 검증용으로 줄인 게 ‘린캔버스’예요. 오늘은 린캔버스를 씁니다.)
+        </p>
+        <p>
+          좋은 소식: 여러분은 아이디어톤에서 이미 절반을 만들었습니다. <strong>왼쪽은 옮겨 적고, 오른쪽(돈)에 시간을 쓰면 됩니다.</strong>
+        </p>
+
+        <h3>5-2. 팀 프로젝트 선정 (3분)</h3>
+        <p>각 팀은 팀원 3명의 <strong>아이디어톤 프로젝트 중 1개</strong>를 골라 진행합니다.</p>
+        <div class="callout orange">
+          <strong>⚠️ 선정 기준: “제일 잘 만든 프로젝트”가 아니라 “수익 얘기할 거리가 가장 많은 프로젝트”</strong>를 고르세요.<br/>
+          안 뽑힌 2명도 “내 프로젝트라면 어땠을까?”로 계속 의견 내며 참여합니다.
+        </div>
+
+        <h3>5-3. 린캔버스 9칸 (채우는 순서)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>칸</th>
+              <th>무엇을 적나</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>① 문제</td><td>우리가 푸는 핵심 Pain Point</td><td>🔁 아이디어톤·2주차에서 <strong>옮겨 적기</strong></td></tr>
+            <tr><td>② 고객군</td><td>그 문제로 가장 아픈 사람 (페르소나)</td><td>🔁 옮겨 적기</td></tr>
+            <tr><td>③ 고유 가치 제안</td><td>“왜 굳이 우리 서비스?” 한 문장</td><td>🔁 다듬기</td></tr>
+            <tr><td>④ 솔루션</td><td>핵심 기능 (MVP)</td><td>🔁 옮겨 적기</td></tr>
+            <tr><td>⑤ 채널</td><td>고객에게 어떻게 닿나</td><td>⚡ 짧게</td></tr>
+            <tr><td>⑥ 수익원<span class="hot">오늘의 핵심</span></td><td>어떤 수익 모델로 돈이 들어오나 (15개 중 1~2개 + 근거)</td><td>⭐ 오늘의 핵심</td></tr>
+            <tr><td>⑦ 비용 구조<span class="hot">오늘의 핵심</span></td><td>무엇에 돈이 드나 (특히 사용량 늘면 같이 느는 비용)</td><td>⭐ 오늘의 핵심</td></tr>
+            <tr><td>⑧ 핵심 지표</td><td>성공을 판단할 숫자</td><td>⏳ §6 강의 후에 채움 (지금은 비워둠)</td></tr>
+            <tr><td>⑨ 경쟁 우위</td><td>남이 쉽게 못 따라하는 것</td><td>⚡ 짧게</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout green">
+          <span class="lead">🗣️ ⑥수익원 칸 채울 때 팀 토론 질문</span>
+          <ul>
+            <li>우리 수익 모델은 15개 중 무엇인가? (4번 5질문으로 근거 대기)</li>
+            <li>돈 내는 사람 = 쓰는 사람인가?</li>
+            <li><strong>이 수익이 성립하려면 무엇이 참이어야 하나?</strong> (예: “사장님이 월 3만원을 낼 만큼 효과를 느낀다” — 이게 틀리면 모델이 무너지는 ‘가장 위험한 가정’입니다. 해커톤에서 이걸 검증하게 됩니다.)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="metrics">
+        <h2>6. 수익 모델을 검증하는 핵심 지표</h2>
+        <div class="callout yellow">
+          <strong>📌 순서 주의:</strong> 지표는 <strong>실습 다음</strong>에 배웁니다. 수익 모델을 직접 골라본 뒤라야,
+          “그게 진짜 남는지”를 보는 숫자가 와닿기 때문이에요. 지금부터 린캔버스 ⑧핵심 지표 칸을 채웁니다.
+        </div>
+
+        <p>
+          “돈 벌 수 있다”는 말은 약합니다. 최소한 <strong>데려오는 비용 &lt; 남기는 가치</strong>여야 하고, 사용자가 <strong>계속 남거나 더 결제할 이유</strong>가 있어야 합니다.
+          입문 단계에선 정확한 계산보다 <strong>“무슨 숫자를 봐야 하는지”</strong>만 알면 충분합니다.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>지표</th>
+              <th>쉬운 뜻</th>
+              <th>한 줄 질문</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>CAC</strong> (고객 획득 비용)</td><td>고객 1명 데려오는 데 든 돈</td><td>한 명 모으는 데 얼마?</td></tr>
+            <tr><td><strong>LTV</strong> (고객 생애 가치)</td><td>고객 1명이 떠날 때까지 남기는 가치</td><td>한 명이 평생 얼마 남겨?</td></tr>
+            <tr><td><strong>LTV / CAC</strong></td><td>둘의 비율</td><td>데려올 만한 장사인가?</td></tr>
+            <tr><td><strong>이탈률(Churn)</strong></td><td>고객·매출이 빠져나가는 비율</td><td>얼마나 빨리 떠나?</td></tr>
+            <tr><td><strong>GMV</strong></td><td>플랫폼에서 일어난 총 거래액</td><td>거래 규모가 커지나?</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout green">
+          <strong>🎯 실습 연결: 6개 다 보지 말고, 딱 1개만.</strong><br/>
+          너희 ⑥수익원에 맞는 <strong>가장 중요한 지표 1개</strong>를 골라 ⑧칸에 적으세요.<br/>
+          구독형 → <strong>이탈률</strong> · 광고형 → <strong>트래픽(DAU)</strong> · 수수료형 → <strong>GMV</strong> · 프리미엄 → <strong>유료 전환율</strong>
+        </div>
+
+        <details class="adv">
+          <summary>📐 (심화) 공식이 궁금하면</summary>
+          <div class="formula">CAC = 총 영업·마케팅 비용 ÷ 새로 들어온 유료 고객 수</div>
+          <div class="formula">LTV ≈ 고객당 평균 매출 × 매출총이익률 ÷ 이탈률   ← ‘매출’이 아니라 ‘마진’ 기준!</div>
+          <p class="note">
+            ※ LTV를 매출 기준으로 계산하면 20~40% 부풀려집니다. 반드시 마진(이익) 기준으로.
+            (NRR·CAC 회수기간 등은 더 깊은 지표이니 지금은 이름만.)
+          </p>
+        </details>
+
+        <div class="callout yellow">
+          ⚠️ LTV/CAC가 흔히 “3:1이면 좋다”고 하는데, <strong>산업·단계마다 다른 경험칙일 뿐 절대 법칙이 아닙니다.</strong>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <h2>7. 가격에도 전략이 있다 (맛보기)</h2>
+        <div class="callout green">
+          🌱 이 챕터는 <strong>“이런 게 있다” 정도만.</strong> 깊이 들어가지 않습니다.
+        </div>
+
+        <p>
+          수익 모델을 정해도 <strong>가격을 잘못 매기면</strong> 사업성이 무너집니다.
+          그런데 가격은 “얼마면 안 비싸 보일까?” 감으로 정하는 게 아니라, <strong>정하는 방법(전략)이 있습니다.</strong>
+        </p>
+
+        <ul>
+          <li><strong>가치 기반 가격</strong> ← 기획자가 가장 먼저 알 것: 원가가 아니라 <strong>고객이 느끼는 가치</strong>를 기준으로 가격을 매김. (여러분의 ③고유 가치 제안과 직결!)</li>
+          <li>참고로, 가격을 더 정교하게 조사하는 설문 기법도 있습니다 → <strong>Van Westendorp</strong>, <strong>Gabor-Granger</strong>. (이름만 기억하면 됩니다. 필요할 때 찾아보세요.)</li>
+        </ul>
+
+        <div class="callout blue">
+          <strong>💡 핵심 메시지: “가격은 감이 아니라 전략이다.”</strong> 오늘은 이 한 문장만 가져가세요.
+        </div>
+      </section>
+
+      <section id="mistakes">
+        <h2>8. 흔한 오해와 수정 문장</h2>
+        <p>발표·기획서에서 자주 나오는 실수입니다. 해커톤 발표 전에 한 번씩 점검하세요.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>잘못된 표현</th>
+              <th>왜 문제인가</th>
+              <th>더 정확한 표현</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>“우리 비즈니스 모델은 구독입니다.”</td>
+              <td>구독은 수익 모델 한 조각일 뿐</td>
+              <td>“우리는 B2B SaaS이고, 수익 모델은 월 구독형입니다.”</td>
+            </tr>
+            <tr>
+              <td>“광고 붙이면 수익화됩니다.”</td>
+              <td>트래픽·광고주 없으면 광고 수익은 작음</td>
+              <td>“반복 트래픽이 일정 규모 이상이면 광고형을 검토할 수 있습니다.”</td>
+            </tr>
+            <tr>
+              <td>“AI니까 무조건 종량제죠.”</td>
+              <td>고객 예측 가능성과 마진 사이 균형 필요</td>
+              <td>“AI 사용량에 따라 원가가 변하니, 구독+종량제 결합을 검토합니다.”</td>
+            </tr>
+            <tr>
+              <td>“MVP는 기능 최소한으로 개발하는 거죠.”</td>
+              <td>랜딩페이지·수기 운영도 MVP가 될 수 있음</td>
+              <td>“MVP는 핵심 가치를 최소한의 방식으로 검증하는 실험입니다.”</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout blue">
+          <strong>💡 발표에서 안전한 문장</strong><br/>
+          “현재 단계에서는 정교한 매출 추정보다 <strong>핵심 고객의 지불 의사와 반복 사용 가능성</strong>을 검증하는 것이 우선입니다.
+          이후 데이터가 쌓이면 가격과 지표를 조정하겠습니다.”
+        </div>
+      </section>
+
+      <section id="lecture">
+        <h2>9. 강의 운영안 (강사용)</h2>
+        <p class="note">세션 60~80분 · 3명 2팀 · 토론식. 자세한 진행안(멘트·지시문)은 별도 run-of-show 문서로.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>시간</th>
+              <th>내용</th>
+              <th>방식</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>5분</td><td>§0 왜 BM? + §1 개념 구분</td><td>강의(짧게)</td></tr>
+            <tr><td>6분</td><td>§2 15개 수익 모델 (분류 감만, 표는 유인물)</td><td>강의</td></tr>
+            <tr><td>5분</td><td>§3 워밍업 역기획 (1주차 ⑤ 연결)</td><td>전체 토론</td></tr>
+            <tr><td>4분</td><td>§4 고르는 5질문 + “돈 내는 사람=쓰는 사람?”</td><td>강의</td></tr>
+            <tr><td>3분</td><td>§5-2 팀 프로젝트 선정</td><td>팀</td></tr>
+            <tr><td>22분</td><td>§5-3 린캔버스 작성 (⑧칸 비움)</td><td>팀 실습</td></tr>
+            <tr><td>6분</td><td>§6 핵심 지표 → 지표 1개로 ⑧칸 채우기</td><td>강의+팀</td></tr>
+            <tr><td>3분</td><td>§7 가격 전략 맛보기</td><td>강의</td></tr>
+            <tr><td>6분</td><td>두 팀 <strong>교차 발표·피드백</strong> (“이 수익 모델, 그 고객에 맞아?”)</td><td>토론</td></tr>
+          </tbody>
+        </table>
+
+        <h3>진행 팁</h3>
+        <ul>
+          <li>왼쪽 칸(①~④)은 “새로 고민 말고 아이디어톤에서 옮겨 적기”라고 못 박아 시간 확보.</li>
+          <li>2팀뿐이니 발표는 <strong>서로 캔버스를 바꿔 보고 한 가지씩 피드백</strong>하는 형식이 효율적.</li>
+          <li>“무조건/완벽하게/기하급수적으로” 같은 과장 표현은 쓰지 않도록 안내.</li>
+        </ul>
+      </section>
+
+      <section id="sources">
+        <h2>10. 출처·검증 메모</h2>
+        <ul class="source-list">
+          <li>본 자료의 개념·정의는 딥리서치로 교차검증함(23개 출처, 핵심 주장 25개 중 23개 확인). <strong>치명적 오류 없음</strong> — 자세한 내용은 <code>정리본_검증리포트.md</code> 참고.</li>
+          <li><strong>린캔버스:</strong> Ash Maurya가 BMC(Osterwalder)를 초기 검증용으로 변형한 도구. <em>9칸 = 문제·고객군·고유가치제안·솔루션·채널·수익원·비용구조·핵심지표·경쟁우위.</em></li>
+          <li><strong>가치 제안 / JTBD:</strong> 2주차 페르소나·문제정의를 더 날카롭게 만드는 개념(고객이 “고용하는 일”에 집중). 심화로 연결 가능.</li>
+          <li>15개 수익 모델 목록은 공개 자료 기반 정리이며, 기업 사례 수치(매출·수수료율 등)는 시간이 지나면 바뀌므로 <strong>슬라이드에 넣을 땐 출처·날짜 함께 표기</strong>할 것.</li>
+        </ul>
+
+        <div class="callout red">
+          <strong>검증 주의</strong><br/>
+          기업 사례의 매출, 가입자 수, 수수료율, 벤치마크 수치는 시간이 지나면 바뀝니다.
+          강의 슬라이드에 넣을 때는 공식 IR, 공식 블로그, 최신 보도자료로 날짜와 출처를 함께 표기해야 합니다.
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
