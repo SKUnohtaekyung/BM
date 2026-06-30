@@ -76,7 +76,7 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
   s.addText("비즈니스 모델 &\n수익 모델", {x:MX,y:2.95,w:8.2,h:1.9,fontSize:46,bold:true,color:C.white,fontFace:KF,lineSpacing:52,margin:0});
   s.addText([{text:"“우리가 만든 서비스, ",options:{color:"C9D4E6"}},{text:"이거 어떻게 돈 벌어요?",options:{color:C.ice,bold:true}},{text:"”",options:{color:"C9D4E6"}}],
     {x:MX,y:5.15,w:8,h:0.5,fontSize:17,fontFace:KF,margin:0});
-  s.addText("기획 파트 · 16주차 BM 세션 · 60~80분 · 3명씩 2팀", {x:MX,y:6.55,w:9,h:0.4,fontSize:13,color:C.muted,fontFace:KF,margin:0});
+  s.addText("기획 파트 · 16주차 BM 세션 · 기획 입문자 대상 · 60~80분 · 3명씩 2팀", {x:MX,y:6.55,w:10.5,h:0.4,fontSize:13,color:C.muted,fontFace:KF,margin:0});
   s.addText("Official LIKELION at SKU · UX/UI Team", {x:W-MX-5,y:0.72,w:5,h:0.4,fontSize:12,color:"9AA6BC",fontFace:KF,align:"right",margin:0});
   s.addNotes("오프닝. 오늘은 '돈 버는 구조'를 기획자의 언어로 다룬다. 아이디어톤에서 만들어봤고 곧 해커톤에서 또 만든다 → 그 서비스가 어떻게 지속되는지 답할 수 있게 만드는 세션.");
 })();
@@ -99,8 +99,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     s.addText(b.d,{x:x+0.35,y:y+1.15,w:cw-0.7,h:0.5,fontSize:15,color:C.gray,fontFace:KF,margin:0});
     if(b.tag) chip(s,x+cw-1.65,y+0.4,b.tag,C.orange,C.orangeBg,1.3);
   });
-  s.addText("좋은 기획은 화면을 잘 그리는 데서 끝나지 않습니다. 오늘은 그중 ‘돈’을 책임집니다.",
-    {x:MX,y:3.25,w:11.9,h:0.5,fontSize:15,color:C.gray,fontFace:KF,margin:0});
+  s.addText("좋은 기획은 화면을 잘 그리는 데서 끝나지 않습니다. 왜 쓰이고·왜 돈을 낼 만하고·어떻게 유지되는지까지 — 오늘은 그중 ‘돈’을 책임집니다.",
+    {x:MX,y:3.13,w:11.9,h:0.72,fontSize:15,color:C.gray,fontFace:KF,margin:0,lineSpacing:21});
   s.addNotes("한 줄 목표를 못 박기. 가치·수익·비용 중 오늘은 '수익'. 이 세 가지를 다 설명할 수 있어야 기획이 절반이 아니라 완성된다.");
 })();
 
@@ -118,7 +118,7 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     {text:"라고 답하는 순간 — 기획이 절반만 끝난 게 들통납니다.", options:{color:C.gray}},
   ], {x:MX,y:4.75,w:11.9,h:0.5,fontSize:17,fontFace:KF,margin:0});
   chip(s, MX, 5.6, "1주차 역기획 연결", C.blue, C.iceBg, 2.1);
-  s.addText("그때 찾아본 ‘수익을 발생시키려 설계한 장치는 어디?’ — 오늘은 그게 무슨 종류이고, 왜 골랐고, 우리 서비스엔 뭐가 맞는지까지 갑니다.",
+  s.addText("1주차 역기획 5질문의 마지막 단계에서 찾아본 ‘수익 장치는 어디?’ — 오늘은 그게 무슨 종류이고, 왜 골랐고, 우리 서비스엔 뭐가 맞는지까지 갑니다.",
     {x:MX+2.3,y:5.58,w:9.6,h:0.7,fontSize:14,color:C.gray,fontFace:KF,margin:0,valign:"top"});
   s.addNotes("동기 부여 슬라이드. 학생들이 이미 겪은 상황(발표 Q&A)으로 시작. 1주차 역기획 5질문의 마지막(수익 포인트 발견)을 오늘 본격적으로 파는 거라고 연결.");
 })();
@@ -163,11 +163,13 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     {text:"수익 모델 ",options:{bold:true,color:C.ink}},
     {text:"= 그중 ‘돈 들어오는 방식’ 한 조각",options:{color:C.gray}},
   ], {x:MX+1.9,y:2.85,w:9.8,h:0.75,fontSize:15.5,fontFace:KF,valign:"middle",margin:0,lineSpacing:22});
+  s.addText("2주차 Why·Who·What·How가 BM의 뼈대 — 거기에 ‘어떻게 지속되는가(돈·비용)’를 더한 게 BM, 수익 모델은 그 마지막 칸 하나.",
+    {x:MX,y:3.92,w:11.93,h:0.3,fontSize:12.5,color:C.muted,fontFace:KF,align:"center",margin:0});
   const cols=[
     {t:"비즈니스 모델", q:"이 사업은 어떻게 작동하고 지속되는가?", m:"가게 전체 운영 설계도", c:C.iceBg, fg:C.blue},
     {t:"수익 모델", q:"돈은 누구에게서 어떤 방식으로 들어오는가?", m:"계산대에서 돈 받는 방식", c:C.surface, fg:C.ink},
   ];
-  const cw=5.8, y=4.1, gap=0.33;
+  const cw=5.8, y=4.35, gap=0.33;
   cols.forEach((b,i)=>{
     const x=MX+i*(cw+gap);
     card(s,x,y,cw,2.3,b.c);
@@ -210,6 +212,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
   const s = pres.addSlide(); bg(s, C.white); header(s); pageNum(s,7);
   eyebrow(s, "15개 수익 모델 · 외울 필요 없는 ‘메뉴판’ (1/2)");
   title(s, "돈 버는 방식은 거의 정해져 있다");
+  s.addText("새로 발명하는 게 아니라, 이미 있는 구조 중 우리에 맞는 걸 고르고 섞습니다 (보통 2~3개).",
+    {x:MX,y:2.32,w:11.93,h:0.3,fontSize:13.5,color:C.gray,fontFace:KF,margin:0});
   const head=["No.","수익 모델","한 줄 뜻","잘 맞는 서비스","봐야 할 숫자"];
   const data=[
     ["1","구독형","월·연 단위 반복 결제","SaaS, OTT, 뉴스레터","반복 매출, 이탈률"],
@@ -226,8 +230,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     color: ci<=1?C.navy:C.gray, bold: ci<=1, fontFace:KF, fontSize:12.5,
     fill:{color: ri%2? "FFFFFF":"F7F9FC"}, align:"left", valign:"middle"
   }})));
-  s.addTable([headRow,...rows], { x:MX, y:2.6, w:11.93, colW:[0.7,2.5,3.5,2.9,2.33],
-    rowH:0.46, border:{type:"solid",color:C.line,pt:0.5}, margin:[2,5,2,5], autoPage:false });
+  s.addTable([headRow,...rows], { x:MX, y:2.72, w:11.93, colW:[0.7,2.5,3.5,2.9,2.33],
+    rowH:0.45, border:{type:"solid",color:C.line,pt:0.5}, margin:[2,5,2,5], autoPage:false });
   s.addNotes("표는 유인물로 넘기고 화면에선 4~5개만 짚기(구독·광고·거래수수료·인앱). 각 모델은 '잘 맞는 서비스 1개 + 봐야 할 숫자 1개'만.");
 })();
 
@@ -258,7 +262,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     {text:"핵심  ", options:{bold:true,color:C.orange}},
     {text:"수익 모델은 발명이 아니라 ", options:{color:C.ink}},
     {text:"선택과 조합", options:{bold:true,color:C.ink}},
-    {text:". 고객 행동·사용 빈도·원가에 맞는 걸 고르는 일.", options:{color:C.gray}},
+    {text:". 고객 행동·사용 빈도·원가에 맞는 걸 고르는 일 ", options:{color:C.gray}},
+    {text:"(→ 다음, 고르는 5질문).", options:{bold:true,color:C.orange}},
   ], {x:MX+0.5,y:6.22,w:10.9,h:0.72,fontSize:15,fontFace:KF,valign:"middle",margin:0});
   s.addNotes("핵심 한 문장으로 마무리: 발명이 아니라 선택과 조합. 다음은 익숙한 앱으로 직접 분류해보는 워밍업.");
 })();
@@ -268,8 +273,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
   const s = pres.addSlide(); bg(s, C.white); header(s); pageNum(s,9);
   eyebrow(s, "워밍업 · 전체 함께 약 5분");
   title(s, "익숙한 앱의 ‘수익 포인트’ 읽기");
-  s.addText("모두가 아는 앱 1개를 정하고(배달의민족·토스·유튜브·당근) 4가지를 같이 답해봅시다.",
-    {x:MX,y:2.5,w:11.9,h:0.45,fontSize:15,color:C.gray,fontFace:KF,margin:0});
+  s.addText("1주차 역기획 5질문의 마지막(⑤ 수익 포인트)을 한 발 더 밀고 갑니다. 모두가 아는 앱 1개(배달의민족·토스·유튜브·당근)로 4가지를 같이 답해봅시다.",
+    {x:MX,y:2.45,w:11.9,h:0.62,fontSize:14.5,color:C.gray,fontFace:KF,margin:0,lineSpacing:20});
   const qs=[
     {t:"수익 포인트", d:"돈이 발생하는 지점은 어디인가?"},
     {t:"모델 분류", d:"15개 중 무엇인가? (하나가 아닐 수 있음)"},
@@ -320,6 +325,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
   const s = pres.addSlide(); bg(s, C.white); header(s); pageNum(s,11);
   eyebrow(s, "선택 기준 · ‘억지 수익 모델’ 거르기");
   title(s, "수익 모델 고르는 5가지 질문");
+  s.addText("‘돈 될 것 같은 방식’이 아니라 ‘고객 행동·비용 구조에 맞는 방식’을 고릅니다.",
+    {x:MX,y:2.32,w:11.93,h:0.3,fontSize:14,color:C.gray,fontFace:KF,margin:0});
   const qs=[
     {k:"사용 빈도", q:"매일·매주 반복해서 쓰나?", m:"구독형 · 프리미엄 · 인앱"},
     {k:"지불 주체", q:"사용자가 내나, 제3자가 내나?", m:"직접판매 / 광고·제휴", hot:true},
@@ -350,8 +357,9 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     {text:"2주차에 만든 ", options:{color:C.gray}},
     {text:"페르소나", options:{bold:true,color:C.blue}},
     {text:"가 정말 ‘돈을 내는 사람’인지 확인하세요. ", options:{color:C.gray}},
-    {text:"광고형·B2B는 쓰는 사람과 내는 사람이 다릅니다.", options:{bold:true,color:C.ink}},
-  ], {x:MX,y:5.1,w:11.93,h:0.9,fontSize:17,fontFace:KF,align:"center",margin:0,lineSpacing:26});
+    {text:"광고형·B2B는 쓰는 사람과 내는 사람이 다릅니다. ", options:{bold:true,color:C.ink}},
+    {text:"놓치면 수익 모델이 통째로 어긋나요.", options:{bold:true,color:C.orange}},
+  ], {x:MX,y:5.05,w:11.93,h:1.0,fontSize:17,fontFace:KF,align:"center",margin:0,lineSpacing:26});
   s.addNotes("이 한 문장만 가져가도 성공. 페르소나(2주차)와 직접 연결. 실습 들어가기 직전의 체크포인트.");
 })();
 
@@ -362,8 +370,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
   title(s, "팀 린캔버스 만들기");
   card(s, MX, 2.65, 5.8, 2.0, C.surface);
   s.addText("린캔버스란?",{x:MX+0.4,y:2.9,w:5,h:0.45,fontSize:18,bold:true,color:C.blue,fontFace:KF,margin:0});
-  s.addText("비즈니스 모델 전체를 한 장(9칸)에 정리하는 도구. BMC를 초기 검증용으로 줄인 버전이에요.",
-    {x:MX+0.4,y:3.4,w:5.0,h:1.1,fontSize:14.5,color:C.gray,fontFace:KF,margin:0,lineSpacing:20});
+  s.addText("비즈니스 모델 전체를 한 장(9칸)에 정리하는 도구. 9칸을 더 자세히 쓰는 게 BMC, 초기 검증용으로 줄인 게 린캔버스예요.",
+    {x:MX+0.4,y:3.35,w:5.0,h:1.25,fontSize:14,color:C.gray,fontFace:KF,margin:0,lineSpacing:19});
   card(s, MX+6.13, 2.65, 5.8, 2.0, C.iceBg);
   s.addText("좋은 소식",{x:MX+6.53,y:2.9,w:5,h:0.45,fontSize:18,bold:true,color:C.navy,fontFace:KF,margin:0});
   s.addText("아이디어톤에서 이미 절반은 만들었어요. 왼쪽은 옮겨 적고, 오른쪽(돈)에 시간을 쓰면 됩니다.",
@@ -381,7 +389,7 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
 /* ============================ S14 — §5 린캔버스 9칸 ============================ */
 (() => {
   const s = pres.addSlide(); bg(s, C.white); header(s); pageNum(s,14);
-  eyebrow(s, "린캔버스 9칸 · 오른쪽 ‘돈’에 시간 쓰기");
+  eyebrow(s, "린캔버스 9칸 · ①→⑨ 순서대로 · 오른쪽 ‘돈’에 시간 쓰기");
   title(s, "한 장으로 완성하는 비즈니스 모델", {fs:26});
   const cells=[
     {n:1,t:"문제",s:"옮겨 적기"},{n:2,t:"고객군",s:"옮겨 적기"},{n:3,t:"고유 가치 제안",s:"다듬기"},
@@ -401,8 +409,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
               : c.wait? chip(s,x+0.24,y+ch-0.5,c.s,C.muted,"E7EAF0",1.5)
               : s.addText(c.s,{x:x+0.24,y:y+ch-0.5,w:cw-0.5,h:0.32,fontSize:12,color:C.muted,fontFace:KF,margin:0});
   });
-  s.addText("수익원·비용 구조에 시간을 몰아 쓰고, 핵심 지표 칸은 비워둡니다 (다음 강의 후 채움).",
-    {x:MX,y:6.68,w:9.6,h:0.3,fontSize:12.5,color:C.gray,fontFace:KF,align:"left",margin:0});
+  s.addText("①→⑨ 순서로 채웁니다. 수익원·비용 구조에 시간을 몰아 쓰고, 핵심 지표 칸은 비워둡니다 (다음 강의 후 채움).",
+    {x:MX,y:6.68,w:11.2,h:0.3,fontSize:12.5,color:C.gray,fontFace:KF,align:"left",margin:0});
   s.addNotes("워크시트 핵심 화면. 왼쪽(1~4)은 옮겨 적기. 6·7(수익원·비용)에 시간 집중. 8(핵심 지표)은 지금 비우고 다음 파트에서 채운다. 타임키핑: 11/6/2분 알림.");
 })();
 
@@ -474,13 +482,15 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
     s.addText("→",{x:x+2.6,y:y,w:0.7,h:ch,fontSize:20,bold:true,color:C.ice,align:"center",valign:"middle",margin:0});
     s.addText(p.b,{x:x+3.2,y:y,w:cw-3.5,h:ch,fontSize:18,bold:true,color:C.blue,fontFace:KF,valign:"middle",align:"right",margin:0});
   });
-  card(s, MX, 5.6, 11.93, 1.1, C.yellowBg);
+  card(s, MX, 5.35, 11.93, 1.0, C.yellowBg);
   s.addText([
     {text:"주의  ", options:{bold:true,color:C.orange}},
     {text:"“LTV/CAC 3:1이면 좋다”는 산업·단계마다 다른 ", options:{color:C.gray}},
     {text:"경험칙일 뿐 절대 법칙이 아닙니다.", options:{bold:true,color:C.ink}},
     {text:"  · LTV는 매출이 아니라 마진 기준.", options:{color:C.gray}},
-  ], {x:MX+0.5,y:5.6,w:10.9,h:1.1,fontSize:14.5,fontFace:KF,valign:"middle",margin:0,lineSpacing:19});
+  ], {x:MX+0.5,y:5.35,w:10.9,h:1.0,fontSize:14.5,fontFace:KF,valign:"middle",margin:0,lineSpacing:19});
+  s.addText("심화(이름만): CAC = 마케팅비 ÷ 새 유료고객 수 · LTV ≈ 고객당 매출 × 마진율 ÷ 이탈률(마진 기준) · 기여이익 · CAC 회수기간 · NRR",
+    {x:MX,y:6.5,w:11.4,h:0.3,fontSize:10.5,color:C.muted,fontFace:KF,align:"left",margin:0});
   s.addNotes("6개 다 보지 말고 수익원에 맞는 1개만 골라 8칸에 적게. LTV/CAC 3:1은 경험칙. LTV는 마진 기준(매출 기준이면 20~40% 과대평가). 심화 지표는 이름만.");
 })();
 
@@ -488,6 +498,8 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
 (() => {
   const s = pres.addSlide(); bg(s, C.white); header(s); pageNum(s,18);
   eyebrow(s, "가격 전략 · 맛보기");
+  s.addText("수익 모델을 잘 골라도 가격을 틀리면 사업성이 무너집니다.",
+    {x:MX,y:1.62,w:11.93,h:0.5,fontSize:18,bold:true,color:C.ink,fontFace:KF,margin:0});
   card(s, MX, 2.45, 11.93, 1.85, C.navy);
   s.addText("“가격은 감이 아니라 전략이다.”",
     {x:MX+0.5,y:2.45,w:10.93,h:1.85,fontSize:32,bold:true,color:C.white,fontFace:KF,align:"center",valign:"middle",margin:0});
@@ -505,13 +517,13 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
 /* ============================ S19 — §8 흔한 오해 ============================ */
 (() => {
   const s = pres.addSlide(); bg(s, C.white); header(s); pageNum(s,19);
-  eyebrow(s, "발표 전 점검");
+  eyebrow(s, "발표·기획서 점검 · 해커톤 발표 전");
   title(s, "흔한 오해와 수정 문장");
   const head=["잘못된 표현","왜 문제인가","더 정확한 표현"];
   const data=[
     ["“비즈니스 모델은 구독입니다.”","구독은 수익 모델 한 조각","“B2B SaaS이고, 수익 모델은 월 구독형입니다.”"],
     ["“광고 붙이면 수익화됩니다.”","트래픽·광고주 없으면 작음","“반복 트래픽이 일정 규모 이상이면 광고형 검토.”"],
-    ["“AI니까 무조건 종량제죠.”","예측 가능성·마진 균형 필요","“원가가 변하니 구독+종량제 결합 검토.”"],
+    ["“AI니까 무조건 종량제죠.”","예측 가능성·마진 균형 필요","“AI 사용량에 원가가 연동되니 구독+종량제 결합 검토.”"],
     ["“MVP는 기능 최소 개발.”","랜딩·수기 운영도 MVP","“핵심 가치를 최소 방식으로 검증하는 실험.”"],
   ];
   const headRow=head.map((t,ci)=>({text:t,options:{bold:true,color:C.white,fill:{color:ci===0?C.red:(ci===2?C.blue:C.navy)},fontFace:KF,fontSize:13.5,valign:"middle"}}));
@@ -559,7 +571,7 @@ function numCircle(slide, x, y, d, num, fill=C.blue, tc=C.white){
   eyebrow(s, "마무리 · 교차 발표 + 다음 단계");
   title(s, "오늘 채운 칸이 해커톤으로 이어진다");
   const cards=[
-    {t:"교차 발표 · 피드백", d:"두 팀이 캔버스를 맞바꿔 보고 한 가지씩 피드백.\n초점: ‘이 수익 모델, 그 고객에 맞아?’"},
+    {t:"교차 발표 · 피드백", d:"두 팀이 캔버스를 맞바꿔 보고 한 가지씩 피드백.\n초점: ‘이 수익 모델, 그 고객에 맞아?’ · ‘돈 내는 사람이 누구야?’"},
     {t:"해커톤으로 연결", d:"오늘 채운 ⑥수익원·⑦비용 + 가장 위험한 가정 →\n해커톤에서 그대로 검증하게 됩니다."},
   ];
   const cw=5.8, y=2.95, gap=0.33;
