@@ -1,2 +1,6 @@
 # Claude Code local settings (machine-specific)
 .claude/settings.local.json
+
+# Node modules (PPT 재생성 시 생성)
+node_modules/
+슬라이드/node_modules/

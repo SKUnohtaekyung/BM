@@ -40,7 +40,8 @@
 | [`design.md`](design.md) | 색상·타이포·레이아웃·이미지 디자인 가이드 |
 | [`ppt_layout_reference.md`](ppt_layout_reference.md) | 재사용 슬라이드 레이아웃 30종(L01~L30) |
 | [`image_generation_prompts.md`](image_generation_prompts.md) | 3D 에셋 AI 이미지 생성 프롬프트 |
-| `슬라이드/` *(생성 시)* | 위 시스템으로 만든 강의 PPT |
+| [`슬라이드/BM_16주차_강의덱.pptx`](슬라이드/BM_16주차_강의덱.pptx) | 위 시스템으로 만든 **강의 PPT (22장 · 발표자 노트 포함)** |
+| [`슬라이드/build_deck.js`](슬라이드/build_deck.js) | 덱 재생성용 pptxgenjs 스크립트 |
 
 ---
 
@@ -68,6 +69,7 @@
 - **자료를 수정할 때**: 반드시 [`_컨텍스트_타겟과커리큘럼.md`](_컨텍스트_타겟과커리큘럼.md)를 먼저 읽어 **눈높이·용어·커리큘럼 연결**을 맞춥니다. 이미 배운 개념은 재설명하지 말고 “연결”합니다.
 - **HTML ↔ 정리본 동기화**: 정리본(`.md`)이 원천입니다. 내용을 바꾸면 HTML도 같은 내용으로 맞춰 주세요.
 - **PPT를 만들 때**: `design.md`(디자인 규칙) → `ppt_layout_reference.md`(레이아웃 ID 선택) → `image_generation_prompts.md`(에셋) 순으로 참조합니다.
+- **PPT를 보거나 발표할 때**: [`슬라이드/BM_16주차_강의덱.pptx`](슬라이드/BM_16주차_강의덱.pptx)를 PowerPoint로 엽니다(슬라이드별 발표자 노트 포함). 폰트는 **Pretendard** 기준이며, 없으면 맑은 고딕 등으로 대체됩니다. 덱을 다시 만들려면 `슬라이드/` 폴더에서 `npm i pptxgenjs && node build_deck.js`를 실행하세요.
 
 ---
 
