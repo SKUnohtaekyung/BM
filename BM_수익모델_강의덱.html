@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>BM: 비즈니스 모델과 수익 모델 — SKU LIKELION</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+  /* ===================================================================
+     §3.1 색상 토큰 + §1.2 캔버스 변수
+     =================================================================== */
+  :root{
+    --sw:1280px; --sh:720px;
+    --white:#FFFFFF;
+    --cover-bg:#1A1A1A;     /* 표지·클로징 배경 */
+    --ink:#141821;          /* 본문 기본 잉크 */
+    --black:#000000;        /* 큰 제목 */
+    --cobalt:#3060C3;       /* 주 강조 */
+    --electric:#2F6BF8;     /* 표지 UX/UI */
+    --ice:#8EC3FF;          /* 헤더 라인·표지 한글 타이틀 */
+    --periwinkle:#92ADF1;   /* 3D 에셋 보조 */
+    --navy:#233B66;         /* 3D 에셋 깊이 */
+    --gray-700:#4F4F4F;     /* 본문 보조 */
+    --gray-400:#9A9A9A;     /* 캡션 */
+    --surface:#F3F5F8;      /* 카드/패널 */
+    --line:#E5E8F0;         /* 구분선 */
+    --th:#F2F5FB;           /* 표 헤더 배경 */
+    --blue-soft:#EEF2FF;    /* 파란 콜아웃 */
+    --green:#0F766E; --green-soft:#E8F7F5;
+    --yellow-soft:#FFF8DB; --yellow-line:#F3E5A6;
+    --orange:#F84818; --orange-soft:#FFF1EA;
+    --red:#D80000; --red-soft:#FFF1F0;
+  }
+
+  /* ===================================================================
+     §1.2 슬라이드 프레임 & 인쇄
+     =================================================================== */
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:"Pretendard","Pretendard Variable",-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+    letter-spacing:-0.02em; color:var(--ink); }
+  .slide{ position:relative; width:var(--sw); height:var(--sh); overflow:hidden;
+    background:#fff; break-after:page; }            /* 모던 속성만 */
+  .slide:last-child{ break-after:auto; }            /* 27p 빈 페이지 방지 */
+
+  @media screen{
+    body{ background:#2b2f36; padding:28px 0; }
+    .deck{ display:flex; flex-direction:column; align-items:center; gap:26px; }
+    .slide{ box-shadow:0 18px 50px rgba(0,0,0,.45); border-radius:6px; }
+  }
+  @media print{
+    @page{ size:1280px 720px; margin:0; }
+    html,body,.slide,.slide *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    body{ background:#fff; padding:0; }
+    .deck{ display:block; gap:0; }
+    .slide{ box-shadow:none; border-radius:0; margin:0; }
+    .dl-btn{ display:none !important; }
+  }
+
+  /* ===================================================================
+     §1.3 PDF 다운로드 버튼
+     =================================================================== */
+  .dl-btn{ position:fixed; right:22px; bottom:22px; z-index:99;
+    background:var(--cobalt); color:#fff; border:0; border-radius:999px;
+    padding:14px 22px; font:700 16px/1 "Pretendard",sans-serif; cursor:pointer;
+    box-shadow:0 10px 26px rgba(48,96,195,.45); }
+  .dl-btn:hover{ filter:brightness(1.06); }
+
+  /* ===================================================================
+     §4.1 상단 헤더 (표준 + 표지/클로징 변형)
+     =================================================================== */
+  .s-head{ position:absolute; top:34px; left:56px; right:56px; height:40px;
+    display:flex; align-items:center; gap:14px; }
+  .s-logo{ width:40px; height:40px; object-fit:contain; }
+  .s-brand{ font-weight:800; font-size:30px; color:var(--black); letter-spacing:-.01em; }
+  .s-line{ flex:1; height:2px; background:var(--ice); margin:0 18px; border-radius:2px; }
+  .s-team{ font-size:16px; line-height:1.35; color:var(--ink); text-align:right;
+    white-space:nowrap; font-weight:500; }
+  /* 어두운 배경 변형 */
+  .s-head.cover-head{ align-items:flex-start; }
+  .cover-head .s-line{ display:none; }
+  .s-brand.on-dark, .s-team.on-dark{ color:#fff; }
+  .brand-stack{ display:flex; flex-direction:column; gap:2px; }
+  .track{ font:800 26px/1 "Pretendard",sans-serif; color:#fff; }
+  .track .ux{ color:var(--electric); }
+
+  /* ===================================================================
+     §4.2 본문 골격 · eyebrow · 제목 · 강조 바
+     =================================================================== */
+  .s-body-wrap{ position:absolute; left:64px; top:132px; width:560px; }
+  .s-eyebrow{ font-weight:700; font-size:17px; color:var(--cobalt); margin:0 0 10px; }
+  .s-title{ font-weight:800; font-size:44px; line-height:1.18; color:var(--black);
+    letter-spacing:-.035em; margin:0 0 18px; }
+  .s-title .hl{ color:var(--cobalt); }
+  .accent-bar{ width:120px; height:14px; border-radius:8px; background:var(--cobalt);
+    margin:6px 0 22px; }
+  .s-lead{ font-weight:700; font-size:26px; color:var(--ink); margin:0 0 16px; }
+  .s-body{ font-size:19px; line-height:1.7; color:var(--gray-700); }
+  .s-body strong{ color:var(--cobalt); font-weight:700; }
+  .s-body p{ margin:0 0 12px; }
+  .s-body ul{ margin:0 0 12px; padding-left:1.15em; }
+  .s-body li{ margin:6px 0; }
+
+  /* ===================================================================
+     §4.3 번호 원형 · 아젠다 항목
+     =================================================================== */
+  .num-circle{ width:64px; height:64px; border-radius:50%; background:var(--cobalt);
+    color:#fff; font-weight:800; font-size:26px; display:grid; place-items:center; flex:0 0 auto; }
+  .agenda-item{ display:flex; gap:22px; align-items:flex-start; }
+  .agenda-item h3{ margin:0 0 4px; font-size:26px; font-weight:800; color:var(--cobalt); }
+  .agenda-item p{ margin:0; font-size:18px; color:var(--gray-700); }
+
+  /* ===================================================================
+     §4.4 콜아웃 · 카드 · pill · 타이밍 · 표 · 강조 태그
+     =================================================================== */
+  .callout{ border-radius:16px; padding:16px 20px; margin:14px 0; border:1px solid var(--line);
+    background:#fbfcff; font-size:17px; line-height:1.6; }
+  .callout strong{ color:var(--cobalt); }
+  .callout.blue{ background:var(--blue-soft); border-color:#DCE4FF; }
+  .callout.green{ background:var(--green-soft); border-color:#C9EBE6; }
+  .callout.orange{ background:var(--orange-soft); border-color:#FFD9C7; }
+  .callout.orange strong{ color:#B9471E; }
+  .callout.yellow{ background:var(--yellow-soft); border-color:var(--yellow-line); }
+  .callout.red{ background:var(--red-soft); border-color:#FFD0CC; }
+  .callout .lead{ display:block; font-weight:800; color:var(--cobalt); margin-bottom:6px; }
+  .callout.green .lead{ color:var(--green); }
+  .callout .note{ color:var(--gray-400); font-size:14px; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:20px; }
+  .card.surface{ background:var(--surface); }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+
+  .pill{ display:inline-flex; align-items:center; border:1px solid var(--line); background:#fff;
+    color:var(--gray-700); border-radius:999px; padding:7px 12px; font-size:13px; font-weight:700; }
+  .timing{ display:inline-block; font-size:14px; font-weight:800; color:var(--cobalt);
+    background:var(--blue-soft); border-radius:999px; padding:5px 12px; margin:0 0 10px; }
+  .hot{ display:inline-block; font-size:11px; font-weight:800; padding:2px 7px; border-radius:999px;
+    background:var(--orange-soft); color:#B9471E; margin-left:6px; vertical-align:middle; }
+
+  table.t{ width:100%; border-collapse:collapse; font-size:15px; border-radius:12px; overflow:hidden; }
+  table.t th,table.t td{ border:1px solid var(--line); padding:10px 12px; vertical-align:top; text-align:left; }
+  table.t th{ background:var(--th); color:var(--cobalt); font-weight:800; white-space:nowrap; }
+  table.t tr:nth-child(even) td{ background:#fcfdff; }
+  .model-table td:nth-child(1){ text-align:center; font-weight:800; color:var(--cobalt); }
+  .model-table td:nth-child(2){ font-weight:800; color:var(--ink); }
+
+  /* ===================================================================
+     §4.5 3D 에셋 배치 헬퍼
+     =================================================================== */
+  .asset{ position:absolute; }
+  .asset.hero{ right:40px; bottom:56px; width:430px; }
+  .asset.spot{ right:48px; top:120px; width:240px; }
+  .asset.s11{ right:40px;  top:104px;  width:230px; }
+  .asset.s12{ right:40px;  top:150px;  width:300px; }
+  .asset.s16{ right:44px;  bottom:60px; width:300px; }
+  .asset.s19{ right:40px;  top:120px;  width:280px; }
+  .asset img{ width:100%; height:auto; display:block; }
+
+  /* ===================================================================
+     §4.7 템플릿 CSS (풀폭 본문 · 센터 메시지)
+     =================================================================== */
+  .s-full{ position:absolute; left:64px; right:64px; top:118px; }
+  .center-msg{ position:absolute; left:64px; right:64px; top:196px; max-width:900px; }
+  .cm-title{ font-weight:800; font-size:52px; line-height:1.22; letter-spacing:-.04em;
+    color:var(--black); margin:0 0 22px; }
+  .cm-title .hl{ color:var(--cobalt); }
+
+  /* 페이지 번호(선택, §4.7-6) */
+  .s-foot{ position:absolute; right:56px; bottom:24px; color:var(--gray-400);
+    font:600 13px/1 "Pretendard",sans-serif; }
+
+  /* ===================================================================
+     §6 S01 표지 CSS
+     =================================================================== */
+  .cover{ background:var(--cover-bg); }
+  .cover .s-head{ top:40px; }
+  .cover-title{ position:absolute; left:64px; top:300px; }
+  .cover-title .week{ color:#fff; font:800 40px/1 "Pretendard",sans-serif; }
+  .cover-title .ko{ color:var(--ice); font:800 64px/1.1 "Pretendard",sans-serif; margin:14px 0 0; }
+  .cover-asset{ position:absolute; right:-35px; bottom:-48px; width:930px; }
+  .cover-presenter{ position:absolute; right:56px; bottom:40px; color:#C9CDD3;
+    font:500 20px/1 "Pretendard",sans-serif; }
+
+  /* ===================================================================
+     §6 S26 클로징 CSS (어두운 배경)
+     =================================================================== */
+  .closing{ background:var(--cover-bg); }
+  .closing .s-brand, .closing .s-team{ color:#fff; }
+  .closing .s-title{ color:#fff; }
+  .closing .s-body{ color:#D6DBE2; }
+  .closing .s-body strong{ color:var(--ice); }
+
+  /* ===================================================================
+     Phase 2 · 고정 슬라이드 미세 보정 (img/1·2·3page.png 1:1 재현)
+     =================================================================== */
+  /* S01 표지 헤더 */
+  .cover .s-head{ top:46px; align-items:center; }
+  .cover-head .s-logo{ width:70px; height:70px; }
+  .cover .s-brand{ font-size:40px; }
+  .cover .track{ font-size:40px; }
+  .cover-head .s-team{ margin-left:auto; font-size:20px; line-height:1.45; }
+
+  /* S02 도입 */
+  .s02-slide .s-body-wrap{ left:72px; top:150px; width:900px; }
+  .s02-slide .s-eyebrow{ font-size:32px; margin:0 0 18px; }
+  .s02-slide .s-title{ font-size:58px; line-height:1.1; white-space:nowrap; margin:0 0 26px; }
+  .s02-slide .s-lead{ font-size:30px; margin:0 0 26px; }
+  .s02-slide .s-body{ font-size:22px; line-height:1.7; }
+  .asset.s02{ right:10px; bottom:30px; width:580px; }
+
+  /* S03 아젠다 */
+  .s03-slide .s-body-wrap{ left:72px; top:230px; width:540px; }
+  .s03-slide .s-title{ font-size:54px; margin:0; }
+  .s03-slide .accent-bar{ width:150px; height:16px; margin:22px 0 30px; }
+  .s03-slide .s-body{ font-size:25px; line-height:1.75; font-weight:600; color:var(--ink); }
+  .s03-list{ position:absolute; left:670px; top:150px; bottom:90px; right:48px;
+    display:flex; flex-direction:column; justify-content:space-between; }
+  .s03-list .agenda-item{ gap:24px; }
+  .s03-list .agenda-item h3{ font-size:30px; }
+  .s03-list .agenda-item p{ font-size:21px; margin-top:6px; line-height:1.4; }
+
+  /* ===================================================================
+     Phase 3A · 본문 슬라이드(S04~S16) 레이아웃
+     =================================================================== */
+  /* 표 슬라이드 공통: 우측에 일러스트 여백 확보(본문/표를 가리지 않게) */
+  .tbl .s-full{ left:64px; right:330px; top:118px; }
+  .tbl > .asset{ position:absolute; right:24px; top:50%; transform:translateY(-50%); width:290px; }
+  .tbl > .asset img{ width:100%; height:auto; display:block; }
+  /* 5열 모델 표(S11·S12): 더 넓게 + 작은 글씨 + 코너 스팟 */
+  .tbl.model .s-full{ right:206px; }
+  .tbl.model table.t{ font-size:13px; }
+  .tbl.model table.t th, .tbl.model table.t td{ padding:7px 9px; }
+  .tbl.model > .asset{ right:18px; width:168px; top:46%; }
+  .table-cap{ margin-top:14px; }
+
+  /* S04 센터 메시지 */
+  .s04 .center-msg{ max-width:700px; top:185px; }
+  .s04 .cm-sub{ font-size:22px; font-weight:600; color:var(--gray-700); margin:0 0 14px; }
+  .asset.s04{ right:30px; top:150px; width:440px; }
+
+  /* S06 3요소 카드 (코발트 강조 — 오렌지 미사용, §7.4 준수) */
+  .s06 .s-body-wrap{ width:620px; }
+  .stat3{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:10px 0 16px; }
+  .stat3 .card{ padding:14px 14px 16px; }
+  .stat3 .card b{ display:block; font-size:19px; color:var(--ink); font-weight:800; margin-bottom:3px; }
+  .stat3 .card span{ font-size:13px; color:var(--gray-700); }
+  .stat3 .card.focus{ border:2px solid var(--cobalt); background:#F5F8FF; }
+  .focus-tag{ display:inline-block; margin-top:8px; font-size:11px; font-weight:800;
+    color:#fff; background:var(--cobalt); border-radius:999px; padding:2px 9px; }
+
+  /* S16 센터 메시지 폭 */
+  .s16-slide .center-msg{ max-width:760px; }
+  .s16-slide .cm-sub{ font-size:20px; color:var(--gray-700); margin:0 0 10px; }
+
+  /* ===================================================================
+     Phase 3B · 본문 슬라이드(S17~S26) 레이아웃
+     =================================================================== */
+  .key{ display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--cobalt);
+    border-radius:999px; padding:1px 8px; margin-left:5px; vertical-align:middle; }
+  /* S19 9행 표 촘촘하게 */
+  .s19-slide table.t{ font-size:14px; }
+  .s19-slide table.t th, .s19-slide table.t td{ padding:7px 10px; }
+  .s19-slide table.t td:first-child{ font-weight:700; color:var(--ink); white-space:nowrap; }
+  /* S24 흔한 오해 표(좌측 넓게 + 코너 스팟, 빨강/파랑 열) */
+  .s24-slide .s-full{ left:64px; right:220px; top:118px; }
+  .s24-slide .asset{ position:absolute; right:18px; top:52%; transform:translateY(-50%); width:185px; }
+  .s24-slide .asset img{ width:100%; height:auto; display:block; }
+  .s24-slide table.t tr:nth-child(even) td{ background:#fff; }
+  .s24-slide table.t td:first-child{ color:var(--red); background:var(--red-soft); font-weight:700; }
+  .s24-slide table.t td:last-child{ color:var(--cobalt); background:#EEF3FF; font-weight:600; }
+  /* S25 코너 스팟 */
+  .asset.s25{ right:40px; bottom:50px; width:330px; }
+  /* S26 클로징 */
+  .s26-recap{ position:absolute; left:64px; top:225px; right:470px; }
+  .s26-recap .s-eyebrow{ color:var(--ice); }
+  .recap3{ display:flex; gap:14px; margin:18px 0; }
+  .recap3 .rc{ flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16);
+    border-radius:16px; padding:16px 14px; }
+  .recap3 .rc b{ display:block; font-size:22px; color:var(--ice); font-weight:800; margin-bottom:4px; }
+  .recap3 .rc span{ font-size:14px; color:#C2C8D2; }
+  .s26-line{ font-size:18px; color:#D6DBE2; margin:0; }
+  .s26-line strong{ color:var(--ice); }
+  .s26-note{ font-size:14px; color:#9AA2AE; line-height:1.6; margin-top:16px; }
+  .s26-note strong{ color:#D6DBE2; }
+  .closing .cover-presenter{ color:#9AA2AE; }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- ============ S01 · 표지 (Cover) = 1page.png ============ -->
+    <section class="slide cover" data-slide="S01">
+      <header class="s-head cover-head">
+        <img class="s-logo" src="img/logo.png" alt="">
+        <div class="brand-stack">
+          <span class="s-brand on-dark">SKU LIKELION</span>
+          <span class="track"><b class="ux">UX/UI</b> TRACK</span>
+        </div>
+        <div class="s-team on-dark">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="cover-title">
+        <div class="week">WEEK 11.</div>
+        <h1 class="ko">기획 &amp; 디자인</h1>
+      </div>
+      <img class="cover-asset" src="img/main-tiles.png" alt="">
+      <div class="cover-presenter">노태경 김지유</div>
+    </section>
+
+    <!-- ============ S02 · 도입 (Intro) = 2page.png ============ -->
+    <section class="slide s02-slide" data-slide="S02">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt="">
+        <span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">11주차 기획시간!</p>
+        <h2 class="s-title">BM: 비즈니스 모델과 수익 모델</h2>
+        <p class="s-lead">우리가 만든 서비스, 이거 어떻게 돈 벌어요?</p>
+        <div class="s-body">
+          서비스가 누구에게 어떤 가치를 주고<br>
+          어떤 방식으로 수익을 만들며<br>
+          어떻게 지속될 수 있는지 정리합니다.
+        </div>
+      </div>
+      <img class="asset s02" src="img/slides/s02_bm-puzzle.png" alt="">
+    </section>
+
+    <!-- ============ S03 · 아젠다 (Agenda) = 3page.png ============ -->
+    <section class="slide s03-slide" data-slide="S03">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt="">
+        <span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <h2 class="s-title">오늘 배우게 될 것</h2>
+        <div class="accent-bar"></div>
+        <div class="s-body">
+          서비스가 오래 지속되려면<br>
+          사용자에게 주는 가치뿐 아니라<br>
+          돈이 들어오고 나가는 구조까지<br>
+          설명할 수 있어야 합니다
+        </div>
+      </div>
+      <div class="s03-list">
+        <div class="agenda-item"><div class="num-circle">1</div><div><h3>BM이 필요한 이유</h3><p>서비스가 왜 쓰이고 어떻게 지속되는지 이해하기</p></div></div>
+        <div class="agenda-item"><div class="num-circle">2</div><div><h3>BM과 수익 모델 구분</h3><p>사업 전체 구조와 돈이 들어오는 방식을 구분하기</p></div></div>
+        <div class="agenda-item"><div class="num-circle">3</div><div><h3>수익 모델 이해와 선택</h3><p>수익 모델을 살펴보고 서비스에 맞는 방식 고르기</p></div></div>
+        <div class="agenda-item"><div class="num-circle">4</div><div><h3>Lean Canvas로 정리</h3><p>고객, 가치, 수익원, 비용 구조를 한 장으로 정리하기</p></div></div>
+      </div>
+    </section>
+
+    <!-- ============ S04 · "그래서 이거… 어떻게 돈 벌어요?" ============ -->
+    <section class="slide s04" data-slide="S04">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="center-msg">
+        <p class="s-eyebrow">PART 1 · BM이 필요한 이유</p>
+        <h2 class="cm-title">“그래서 이거… <span class="hl">어떻게 돈 벌어요?</span>”</h2>
+        <p class="cm-sub">발표 때 누군가 이렇게 묻습니다.</p>
+        <div class="callout">“음… 광고 붙이면 되지 않을까요?”라고 답하는 순간, 기획이 절반만 끝난 게 들통납니다.</div>
+      </div>
+      <img class="asset s04" src="img/slides/s04_money-question.png" alt="">
+    </section>
+
+    <!-- ============ S05 · 1주차 역기획, 한 발 더 ============ -->
+    <section class="slide" data-slide="S05">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">PART 1 · BM이 필요한 이유</p>
+        <h2 class="s-title">1주차 역기획, <span class="hl">한 발 더</span> 들어갑니다</h2>
+        <div class="s-body">
+          <ul>
+            <li>1주차 역기획 마지막 단계 — “기획자가 <strong>수익을 발생시키려 설계한 장치는 어디 있나?</strong>”를 찾아봤죠.</li>
+            <li>그땐 “장치가 어디 있나”까지만. 오늘은 그 장치가 <strong>무슨 종류이고, 왜 골랐고, 뭐가 맞는지</strong>까지 갑니다.</li>
+          </ul>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s05_one-step-further.png" alt="">
+    </section>
+
+    <!-- ============ S06 · 좋은 기획은 화면에서 끝나지 않는다 ============ -->
+    <section class="slide s06" data-slide="S06">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">PART 1 · BM이 필요한 이유</p>
+        <h2 class="s-title">좋은 기획은 <span class="hl">화면</span>에서 끝나지 않습니다</h2>
+        <div class="stat3">
+          <div class="card"><b>가치</b><span>왜 쓰이는가</span></div>
+          <div class="card focus"><b>수익</b><span>왜 돈을 낼 만한가</span><br><span class="focus-tag">오늘의 초점</span></div>
+          <div class="card"><b>비용</b><span>어떻게 유지되는가</span></div>
+        </div>
+        <div class="callout blue">오늘은 그중 <strong>돈</strong> 부분을 책임집니다.</div>
+      </div>
+      <img class="asset hero" src="img/slides/s06_value-revenue-cost.png" alt="">
+    </section>
+
+    <!-- ============ S07 · 비즈니스 모델 ⊃ 수익 모델 ============ -->
+    <section class="slide" data-slide="S07">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">PART 2 · BM과 수익 모델 구분</p>
+        <h2 class="s-title">비즈니스 모델 <span class="hl">⊃</span> 수익 모델</h2>
+        <div class="s-body">
+          <p>이름이 비슷해서 헷갈리지만, 둘은 <strong>포함 관계</strong>입니다.</p>
+          <div class="callout green">
+            <strong>비즈니스 모델</strong> = 고객 + 문제 + 가치 + 전달 방식 + 비용 구조 + 수익 구조<br>
+            <strong>수익 모델</strong> = 그중 “돈이 들어오는 방식” 한 조각 (구독·광고·수수료…)
+          </div>
+          <p>2주차의 Why–Who–What–How가 비즈니스 모델의 뼈대입니다.</p>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s07_revenue-is-one-slice.png" alt="">
+    </section>
+
+    <!-- ============ S08 · 운영 설계도 vs 계산대 ============ -->
+    <section class="slide tbl" data-slide="S08">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 2 · BM과 수익 모델 구분</p>
+        <h2 class="s-title">한쪽은 운영 설계도, 한쪽은 계산대</h2>
+        <table class="t">
+          <thead><tr><th>개념</th><th>핵심 질문</th><th>쉬운 비유</th></tr></thead>
+          <tbody>
+            <tr><td><strong>비즈니스 모델</strong></td><td>이 사업은 어떻게 작동하고 지속되는가?</td><td>가게 전체 운영 설계도</td></tr>
+            <tr><td><strong>수익 모델</strong></td><td>돈은 누구에게서 어떤 방식으로 들어오는가?</td><td>계산대에서 돈 받는 방식</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s08_store-vs-register.png" alt="">
+    </section>
+
+    <!-- ============ S09 · 예시: AI 마케팅 서비스 ============ -->
+    <section class="slide tbl" data-slide="S09">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 2 · BM과 수익 모델 구분</p>
+        <h2 class="s-title">예시: <span class="hl">AI 마케팅</span> 서비스</h2>
+        <table class="t">
+          <tbody>
+            <tr><th style="width:120px;">비즈니스 모델</th><td>외식업 사장님의 리뷰·고객 데이터를 분석해 홍보 콘텐츠 생성을 돕는 AI 마케팅 비서</td></tr>
+            <tr><th>수익 모델</th><td>월 구독료 + 영상 생성 건당 과금 + 프리미엄 리포트 판매</td></tr>
+          </tbody>
+        </table>
+        <div class="callout green">
+          <span class="lead">▷ 조별 토론 (2분)</span>
+          “우리 비즈니스 모델은 <strong>구독</strong>입니다.” — 이 문장, 어디가 어색할까요?
+          <span class="note">(힌트: 구독은 ‘돈 받는 방식’일 뿐, 누구의 무슨 문제를 푸는지가 빠졌죠.)</span>
+        </div>
+      </div>
+      <img class="asset" src="img/slides/s09_ai-revenue-merge.png" alt="">
+    </section>
+
+    <!-- ============ S10 · 발명이 아니라 선택과 조합 ============ -->
+    <section class="slide" data-slide="S10">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <h2 class="s-title">수익 모델은 <span class="hl">발명이 아니라 선택과 조합</span></h2>
+        <div class="s-body">
+          <p>돈 버는 방식은 사실 거의 정해져 있습니다. 이미 있는 구조 중 우리 서비스에 맞는 걸 <strong>고르고 섞는</strong> 일에 가깝죠. (대부분 <strong>2~3개를 조합</strong>합니다.)</p>
+          <div class="callout">다음 표는 외워야 할 목록이 아니라 ‘고를 때 펼쳐 보는 <strong>메뉴판</strong>’입니다.</div>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s10_revenue-menu.png" alt="">
+    </section>
+
+    <!-- ============ S11 · 15개 수익 모델 메뉴판 (1/2) ============ -->
+    <section class="slide tbl model" data-slide="S11">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <h2 class="s-title">15개 수익 모델 메뉴판 <span class="hl">(1/2)</span></h2>
+        <table class="t model-table">
+          <thead><tr><th>No.</th><th>수익 모델</th><th>한 줄 뜻</th><th>잘 맞는 서비스</th><th>봐야 할 숫자</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>구독형</td><td>월·연 단위 반복 결제</td><td>SaaS, OTT, 뉴스레터</td><td>반복 매출, 이탈률</td></tr>
+            <tr><td>2</td><td>프리미엄(Freemium)</td><td>기본 무료, 고급 유료</td><td>생산성·협업·디자인 툴</td><td>무료→유료 전환율</td></tr>
+            <tr><td>3</td><td>기부·후원형</td><td>팬·사용자의 자발적 후원</td><td>창작자, 커뮤니티, 오픈소스</td><td>후원액, 후원 지속률</td></tr>
+            <tr><td>4</td><td>광고형</td><td>사용자는 무료, 광고주가 지불</td><td>미디어, 검색, SNS</td><td>트래픽(DAU/MAU), CTR</td></tr>
+            <tr><td>5</td><td>거래 수수료형</td><td>거래 성사 시 일정 비율 수취</td><td>마켓플레이스, 배달앱</td><td>거래액(GMV), 수수료율</td></tr>
+            <tr><td>6</td><td>제휴(어필리에이트)형</td><td>고객을 보내주고 소개료</td><td>리뷰·추천 콘텐츠, 블로그</td><td>전환율, 전환당 수익</td></tr>
+            <tr><td>7</td><td>직접판매형</td><td>제품·콘텐츠를 직접 판매</td><td>전자책, 강의, 굿즈</td><td>객단가, 재구매율</td></tr>
+            <tr><td>8</td><td>인앱 구매형</td><td>앱 안에서 아이템·기능 개별 구매</td><td>게임, AI 앱, 콘텐츠 앱</td><td>결제자 비율, 결제자당 매출</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s11_menu-cards-spot.png" alt="">
+    </section>
+
+    <!-- ============ S12 · 15개 수익 모델 메뉴판 (2/2) ============ -->
+    <section class="slide tbl model" data-slide="S12">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <h2 class="s-title">15개 수익 모델 메뉴판 <span class="hl">(2/2)</span></h2>
+        <table class="t model-table">
+          <thead><tr><th>No.</th><th>수익 모델</th><th>한 줄 뜻</th><th>잘 맞는 서비스</th><th>봐야 할 숫자</th></tr></thead>
+          <tbody>
+            <tr><td>9</td><td>라이선스형</td><td>기술·콘텐츠·IP 사용권 판매</td><td>폰트, 캐릭터, 엔진, 특허</td><td>계약 수, 갱신률</td></tr>
+            <tr><td>10</td><td>화이트라벨·OEM</td><td>내 제품을 남의 브랜드로 공급</td><td>B2B 솔루션, API 제품</td><td>파트너 수, 유지율</td></tr>
+            <tr><td>11</td><td>종량제</td><td>쓴 만큼 지불</td><td>클라우드, API, AI 토큰</td><td>사용량, 단위 원가</td></tr>
+            <tr><td>12</td><td>면도기-면도날형</td><td>본체는 싸게, 소모품에서 수익</td><td>프린터·잉크, 캡슐커피</td><td>소모품 재구매율</td></tr>
+            <tr><td>13</td><td>성과보수형</td><td>결과가 나왔을 때만 청구</td><td>채용, 광고 대행, 리드 생성</td><td>성과 발생률, 건당 수익</td></tr>
+            <tr><td>14</td><td>데이터 판매형</td><td>쌓인 데이터를 리포트·API로</td><td>상권 분석, 시장 리포트</td><td>데이터 품질, 구매 반복률</td></tr>
+            <tr><td>15</td><td>렌탈·대여형</td><td>소유가 아니라 기간 사용권</td><td>차량, 장비, 공간, 의류</td><td>가동률, 회수 기간</td></tr>
+          </tbody>
+        </table>
+        <div class="callout orange table-cap"><strong>◆ 핵심 한 문장</strong> &nbsp;수익 모델은 <strong>발명이 아니라 선택과 조합</strong>입니다. “우리 고객이 어떻게 행동하고, 얼마나 자주 쓰고, 우리 원가가 어떤가”에 맞는 걸 고르는 거예요.</div>
+      </div>
+      <img class="asset" src="img/slides/s12_combine-modules.png" alt="">
+    </section>
+
+    <!-- ============ S13 · 워밍업: 역기획으로 수익 포인트 읽기 ============ -->
+    <section class="slide tbl" data-slide="S13">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <span class="timing">전체 함께 · 약 5분</span>
+        <h2 class="s-title">워밍업: <span class="hl">역기획</span>으로 수익 포인트 읽기</h2>
+        <p style="font-size:17px;color:var(--gray-700);margin:0 0 12px;">모두가 아는 앱 1개(배달의민족·토스·유튜브·당근)를 떠올리고 아래 질문에 답해봅시다.</p>
+        <table class="t">
+          <thead><tr><th style="width:130px;">단계</th><th>질문</th></tr></thead>
+          <tbody>
+            <tr><td>① 수익 포인트</td><td>이 앱에서 <strong>돈이 발생하는 지점</strong>은 어디인가?</td></tr>
+            <tr><td>② 모델 분류</td><td>그건 위 <strong>15개 중 무엇</strong>인가? (하나가 아닐 수 있음)</td></tr>
+            <tr><td>③ 근거</td><td>이 서비스엔 <strong>왜 그 모델이 맞을까?</strong></td></tr>
+            <tr><td>④ 지불 주체</td><td>돈 내는 사람이 <strong>앱 쓰는 사람과 같은가, 다른가?</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s13_magnify-revenue-point.png" alt="">
+    </section>
+
+    <!-- ============ S14 · 쓰는 사람 ≠ 내는 사람 ============ -->
+    <section class="slide" data-slide="S14">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="width:600px;">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <h2 class="s-title">쓰는 사람 <span class="hl">≠</span> 내는 사람</h2>
+        <div class="s-body">
+          <div class="callout green">
+            <span class="lead">▷ 예시</span>
+            배달의민족 → 수익 포인트 = 주문/광고 → 거래 수수료형 + 광고형 → 돈 내는 사람은 <strong>가게 사장님</strong> (쓰는 사람은 손님!)
+          </div>
+          <p>이 <strong>‘지불 주체가 다르다’는 감각</strong>이 오늘의 핵심 중 하나입니다.</p>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s14_payer-coin-arc.png" alt="">
+    </section>
+
+    <!-- ============ S15 · 수익 모델 고르는 5가지 질문 ============ -->
+    <section class="slide tbl" data-slide="S15">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <h2 class="s-title">수익 모델 고르는 <span class="hl">5가지 질문</span></h2>
+        <p style="font-size:17px;color:var(--gray-700);margin:0 0 12px;">“돈 될 것 같은 방식”이 아니라 <strong style="color:var(--cobalt);font-weight:700;">“고객 행동과 비용 구조에 맞는 방식”</strong>을 골라야 합니다.</p>
+        <table class="t">
+          <thead><tr><th>판단 기준</th><th>확인 질문</th><th>잘 맞는 수익 모델</th></tr></thead>
+          <tbody>
+            <tr><td>사용 빈도</td><td>매일·매주 반복해서 쓰나?</td><td>구독형, 프리미엄, 인앱 구매형</td></tr>
+            <tr><td><strong>지불 주체</strong></td><td><strong>사용자가 내나, 제3자가 내나?</strong></td><td>직접판매형 / 광고형·제휴형</td></tr>
+            <tr><td>가치 발생 시점</td><td>쓰는 순간 가치? 결과가 나와야 가치?</td><td>종량제 / 성과보수형</td></tr>
+            <tr><td>원가 구조</td><td>사용량 늘수록 서버·AI 비용도 느나?</td><td>종량제, 하이브리드 구독</td></tr>
+            <tr><td>반복성</td><td>한 번 팔고 끝? 계속 받을 수 있나?</td><td>구독형, 렌탈형, 면도기-면도날형</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s15_revenue-filter-funnel.png" alt="">
+    </section>
+
+    <!-- ============ S16 · "돈 내는 사람 = 쓰는 사람인가?" ============ -->
+    <section class="slide s16-slide" data-slide="S16">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="center-msg">
+        <p class="s-eyebrow">PART 3 · 수익 모델 이해와 선택</p>
+        <p class="cm-sub">꼭 기억할 질문 하나</p>
+        <h2 class="cm-title">“돈 내는 사람 = <span class="hl">쓰는 사람</span>인가?”</h2>
+        <div class="callout blue">2주차에 만든 <strong>페르소나</strong>가 정말 돈을 내는 사람인지 확인하세요. 광고형·B2B는 “쓰는 사람”과 “내는 사람”이 다릅니다. 놓치면 수익 모델이 통째로 어긋납니다.</div>
+      </div>
+      <img class="asset s16" src="img/slides/s16_payer-vs-user.png" alt="">
+    </section>
+
+    <!-- ============ S17 · 린캔버스: 한 장(9칸)에 정리 ============ -->
+    <section class="slide" data-slide="S17">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="width:600px;">
+        <p class="s-eyebrow">PART 4 · Lean Canvas로 정리</p>
+        <h2 class="s-title">린캔버스: 비즈니스 모델을 <span class="hl">한 장(9칸)</span>에</h2>
+        <div class="s-body">
+          <p>비즈니스 모델 전체를 <strong>한 장(9칸)</strong>에 정리하는 도구입니다. (BMC를 초기 아이디어 검증용으로 줄인 것이 린캔버스예요.)</p>
+          <div class="callout blue">좋은 소식 — 아이디어톤에서 이미 절반을 만들었습니다. <strong>왼쪽은 옮겨 적고, 오른쪽(돈)에 시간을 쓰면 됩니다.</strong></div>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s17_lean-canvas-board.png" alt="">
+    </section>
+
+    <!-- ============ S18 · 팀 프로젝트 선정 ============ -->
+    <section class="slide" data-slide="S18">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="width:610px;">
+        <p class="s-eyebrow">PART 4 · Lean Canvas로 정리</p>
+        <span class="timing">선정 3분</span>
+        <h2 class="s-title">팀 프로젝트 선정</h2>
+        <div class="s-body">
+          <p>각 팀은 팀원 3명의 <strong>아이디어톤 프로젝트 중 1개</strong>를 골라 진행합니다.</p>
+          <div class="callout orange"><strong>▲ 선정 기준</strong> — “제일 잘 만든 프로젝트”가 아니라 <strong>“수익 얘기할 거리가 가장 많은 프로젝트”</strong>를 고르세요. 안 뽑힌 2명도 “내 프로젝트라면 어땠을까?”로 계속 의견 내며 참여합니다.</div>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s18_pick-project.png" alt="">
+    </section>
+
+    <!-- ============ S19 · 린캔버스 9칸, 채우는 순서 ============ -->
+    <section class="slide tbl s19-slide" data-slide="S19">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 4 · Lean Canvas로 정리</p>
+        <h2 class="s-title">린캔버스 9칸, <span class="hl">채우는 순서</span></h2>
+        <table class="t">
+          <thead><tr><th style="width:150px;">칸</th><th>무엇을 적나</th><th style="width:270px;">상태</th></tr></thead>
+          <tbody>
+            <tr><td>① 문제</td><td>우리가 푸는 핵심 Pain Point</td><td>↻ 아이디어톤·2주차에서 옮겨 적기</td></tr>
+            <tr><td>② 고객군</td><td>그 문제로 가장 아픈 사람 (페르소나)</td><td>↻ 옮겨 적기</td></tr>
+            <tr><td>③ 고유 가치 제안</td><td>“왜 굳이 우리 서비스?” 한 문장</td><td>↻ 다듬기</td></tr>
+            <tr><td>④ 솔루션</td><td>핵심 기능 (MVP)</td><td>↻ 옮겨 적기</td></tr>
+            <tr><td>⑤ 채널</td><td>고객에게 어떻게 닿나</td><td>▹ 짧게</td></tr>
+            <tr><td>⑥ 수익원 <span class="key">오늘의 핵심</span></td><td>어떤 수익 모델로 돈이 들어오나 (15개 중 1~2개 + 근거)</td><td>★</td></tr>
+            <tr><td>⑦ 비용 구조 <span class="key">오늘의 핵심</span></td><td>무엇에 돈이 드나 (사용량 늘면 같이 느는 비용)</td><td>★</td></tr>
+            <tr><td>⑧ 핵심 지표</td><td>성공을 판단할 숫자</td><td>◇ 지표 강의 후에 채움 (지금은 비움)</td></tr>
+            <tr><td>⑨ 경쟁 우위</td><td>남이 쉽게 못 따라하는 것</td><td>▹ 짧게</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s19_canvas-9cells-order.png" alt="">
+    </section>
+
+    <!-- ============ S20 · 이 수익이 성립하려면? (가장 위험한 가정) ============ -->
+    <section class="slide" data-slide="S20">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="width:630px;">
+        <p class="s-eyebrow">PART 4 · Lean Canvas로 정리</p>
+        <h2 class="s-title">이 수익이 성립하려면 <span class="hl">무엇이 참이어야 하나?</span></h2>
+        <div class="s-body">
+          <p>⑥수익원 칸을 채울 때, 팀에서 이렇게 물어보세요.</p>
+          <ul>
+            <li>우리 수익 모델은 15개 중 무엇인가? (5질문으로 근거 대기)</li>
+            <li>돈 내는 사람 = 쓰는 사람인가?</li>
+          </ul>
+          <div class="callout orange"><strong>▲ 가장 위험한 가정</strong> — 예: “사장님이 월 3만원을 낼 만큼 효과를 느낀다.” 이게 틀리면 모델이 통째로 무너집니다. 해커톤에서 바로 이걸 검증하세요.</div>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s20_riskiest-assumption.png" alt="">
+    </section>
+
+    <!-- ============ S21 · 수익 모델을 검증하는 핵심 지표 ============ -->
+    <section class="slide tbl" data-slide="S21">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">PART 4 · 핵심 지표로 ⑧칸 채우기</p>
+        <h2 class="s-title">수익 모델을 검증하는 <span class="hl">핵심 지표</span></h2>
+        <div class="callout yellow" style="margin:6px 0 10px;"><strong>※ 순서 주의</strong> — 지표는 ‘실습 다음’에 배웁니다. 직접 골라본 뒤라야 “무슨 숫자를 봐야 하는지”가 와닿거든요. 최소한 <strong>데려오는 비용 &lt; 남기는 가치</strong>여야 합니다.</div>
+        <table class="t">
+          <thead><tr><th style="width:200px;">지표</th><th>쉬운 뜻</th><th>한 줄 질문</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CAC</strong> (고객 획득 비용)</td><td>고객 1명 데려오는 데 든 돈</td><td>한 명 모으는 데 얼마?</td></tr>
+            <tr><td><strong>LTV</strong> (고객 생애 가치)</td><td>고객 1명이 떠날 때까지 남기는 가치</td><td>한 명이 평생 얼마 남겨?</td></tr>
+            <tr><td><strong>LTV / CAC</strong></td><td>둘의 비율</td><td>데려올 만한 장사인가?</td></tr>
+            <tr><td><strong>이탈률(Churn)</strong></td><td>고객·매출이 빠져나가는 비율</td><td>얼마나 빨리 떠나?</td></tr>
+            <tr><td><strong>GMV</strong></td><td>플랫폼에서 일어난 총 거래액</td><td>거래 규모가 커지나?</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s21_metrics-dashboard.png" alt="">
+    </section>
+
+    <!-- ============ S22 · 6개 다 보지 말고, 딱 1개만 ============ -->
+    <section class="slide" data-slide="S22">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="width:640px;">
+        <p class="s-eyebrow">PART 4 · 핵심 지표로 ⑧칸 채우기</p>
+        <h2 class="s-title">6개 다 보지 말고, <span class="hl">딱 1개만</span></h2>
+        <div class="s-body">
+          <div class="callout green">
+            <span class="lead">◎ 실습 연결</span>
+            너희 ⑥수익원에 맞는 <strong>가장 중요한 지표 1개</strong>를 골라 ⑧칸에 적으세요.<br>
+            구독형 → <strong>이탈률</strong> · 광고형 → <strong>트래픽(DAU)</strong> · 수수료형 → <strong>GMV</strong> · 프리미엄 → <strong>유료 전환율</strong>
+          </div>
+          <div class="callout yellow"><strong>※</strong> LTV는 매출이 아니라 <strong>마진(이익) 기준</strong>. “LTV/CAC 3:1”은 절대 법칙이 아니라 산업·단계마다 다른 경험칙입니다.</div>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s22_pick-one-metric.png" alt="">
+    </section>
+
+    <!-- ============ S23 · 가격은 감이 아니라 전략이다 ============ -->
+    <section class="slide" data-slide="S23">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="width:620px;">
+        <p class="s-eyebrow">보너스 · 가격 전략 (맛보기)</p>
+        <h2 class="s-title">가격은 <span class="hl">감이 아니라 전략</span>이다</h2>
+        <div class="s-body">
+          <p>수익 모델을 정해도 가격을 잘못 매기면 사업성이 무너집니다. 가격엔 <strong>정하는 방법(전략)</strong>이 있어요.</p>
+          <ul>
+            <li><strong>가치 기반 가격</strong> — 원가가 아니라 <strong>고객이 느끼는 가치</strong> 기준 (③고유 가치 제안과 직결).</li>
+            <li>참고 설문 기법: Van Westendorp, Gabor-Granger (이름만 기억).</li>
+          </ul>
+          <div class="callout blue"><strong>핵심</strong> — “가격은 감이 아니라 전략이다.” 오늘은 이 한 문장만 가져가세요.</div>
+        </div>
+      </div>
+      <img class="asset hero" src="img/slides/s23_value-scale.png" alt="">
+    </section>
+
+    <!-- ============ S24 · 흔한 오해와 수정 문장 ============ -->
+    <section class="slide s24-slide" data-slide="S24">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-full">
+        <p class="s-eyebrow">마무리 · 발표 전 점검</p>
+        <h2 class="s-title">흔한 오해와 <span class="hl">수정 문장</span></h2>
+        <table class="t">
+          <thead><tr><th style="width:33%;">잘못된 표현</th><th>왜 문제인가</th><th style="width:33%;">더 정확한 표현</th></tr></thead>
+          <tbody>
+            <tr><td>“우리 비즈니스 모델은 구독입니다.”</td><td>구독은 수익 모델 한 조각일 뿐</td><td>“우리는 B2B SaaS이고, 수익 모델은 월 구독형입니다.”</td></tr>
+            <tr><td>“광고 붙이면 수익화됩니다.”</td><td>트래픽·광고주 없으면 광고 수익은 작음</td><td>“반복 트래픽이 일정 규모 이상이면 광고형을 검토할 수 있습니다.”</td></tr>
+            <tr><td>“AI니까 무조건 종량제죠.”</td><td>고객 예측 가능성과 마진 사이 균형 필요</td><td>“AI 사용량에 따라 원가가 변하니, 구독+종량제 결합을 검토합니다.”</td></tr>
+            <tr><td>“MVP는 기능 최소한으로 개발하는 거죠.”</td><td>랜딩페이지·수기 운영도 MVP가 될 수 있음</td><td>“MVP는 핵심 가치를 최소한의 방식으로 검증하는 실험입니다.”</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="asset" src="img/slides/s24_misconception-fix.png" alt="">
+    </section>
+
+    <!-- ============ S25 · 발표에서 안전한 문장 ============ -->
+    <section class="slide" data-slide="S25">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="center-msg" style="max-width:780px;top:180px;">
+        <p class="s-eyebrow">마무리 · 발표 전 점검</p>
+        <h2 class="cm-title" style="font-size:46px;">발표에서 <span class="hl">안전한 문장</span></h2>
+        <div class="callout blue" style="font-size:21px;line-height:1.7;">“현재 단계에서는 정교한 매출 추정보다 <strong>핵심 고객의 지불 의사와 반복 사용 가능성</strong>을 검증하는 것이 우선입니다. 이후 데이터가 쌓이면 가격과 지표를 조정하겠습니다.”</div>
+      </div>
+      <img class="asset s25" src="img/slides/s25_podium-script.png" alt="">
+    </section>
+
+    <!-- ============ S26 · 클로징 — 오늘 기억할 한 가지 ============ -->
+    <section class="slide closing s26-slide" data-slide="S26">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s26-recap">
+        <p class="s-eyebrow">마무리</p>
+        <h2 class="s-title">오늘 기억할 한 가지</h2>
+        <div class="recap3">
+          <div class="rc"><b>가치</b><span>왜 쓰이나</span></div>
+          <div class="rc"><b>수익</b><span>왜 돈을 낼 만한가</span></div>
+          <div class="rc"><b>비용</b><span>어떻게 유지되나</span></div>
+        </div>
+        <p class="s26-line">셋 다 설명할 수 있어야 하지만, <strong>오늘은 그중 ‘돈’(수익)</strong>을 책임졌습니다.</p>
+        <p class="s26-note">개념은 딥리서치로 교차검증했습니다(23개 출처). <strong>기업 사례 수치는 시간이 지나면 바뀌므로, 슬라이드에 넣을 땐 공식 출처·날짜를 함께 표기하세요.</strong></p>
+      </div>
+      <img class="asset hero" src="img/slides/s26_recap-glow.png" alt="">
+      <div class="cover-presenter">노태경 김지유</div>
+    </section>
+
+  </div>
+  <button class="dl-btn" onclick="window.print()">↓ PDF 다운로드</button>
+</body>
+</html>

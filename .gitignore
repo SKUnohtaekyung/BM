@@ -4,3 +4,9 @@
 # Node modules (PPT 재생성 시 생성)
 node_modules/
 슬라이드/node_modules/
+
+# 배포본 빌드 임시 폴더 (다운스케일 이미지 — base64로 내장되므로 커밋 불필요)
+img_dist/
+
+# Office 임시 잠금 파일
+~$*
