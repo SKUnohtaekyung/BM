@@ -121,11 +121,20 @@
   .accent-bar{ width:120px; height:14px; border-radius:8px; background:var(--cobalt);
     margin:6px 0 22px; }
   .s-lead{ font-weight:700; font-size:26px; color:var(--ink); margin:0 0 16px; }
+  .s-title, .cm-title, .s-lead, .s-body, .callout, .card, table.t th, table.t td,
+  .plain-line, .pricing-method, .price-detail-card, .cmp, .lc, .metric, .mapc,
+  .recap-card{ word-break:keep-all; overflow-wrap:normal; }
   .s-body{ font-size:19px; line-height:1.7; color:var(--gray-700); }
   .s-body strong{ color:var(--cobalt); font-weight:700; }
   .s-body p{ margin:0 0 12px; }
-  .s-body ul{ margin:0 0 12px; padding-left:1.15em; }
-  .s-body li{ margin:6px 0; }
+  .s-body ul{ margin:0 0 12px; padding-left:0; list-style:none; }
+  .s-body li{ margin:8px 0; }
+  .s-body .plain-lines{ display:flex; flex-direction:column; gap:14px; margin:4px 0; }
+  .s-body .plain-line{ margin:0; padding:16px 18px; border-radius:14px;
+    background:#fff; border:1px solid var(--line); line-height:1.62; }
+  .s-body .plain-line strong:first-child{ display:block; color:var(--ink); margin-bottom:4px; }
+  .s-body .plain-lines.compact{ gap:10px; margin:8px 0 16px; }
+  .s-body .plain-lines.compact .plain-line{ padding:13px 16px; font-size:18px; }
 
   /* ===================================================================
      §4.3 번호 원형 · 아젠다 항목
@@ -279,6 +288,28 @@
   .s16-slide .center-msg{ max-width:760px; }
   .s16-slide .cm-sub{ font-size:20px; color:var(--gray-700); margin:0 0 10px; }
 
+  /* S23 가격 조사법 카드 */
+  .pricing-methods{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+  .pricing-method{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .pricing-method b{ display:block; font-size:17px; color:var(--cobalt); margin-bottom:6px; }
+  .pricing-method span{ display:block; font-size:14px; line-height:1.55; color:var(--gray-700); }
+
+  /* S25 가격 조사법 상세 설명 */
+  .price-detail{ bottom:54px; display:flex; flex-direction:column; }
+  .price-detail .s-title{ margin-bottom:18px; }
+  .price-method-grid{ flex:1 1 auto; display:grid; grid-template-columns:1fr 1fr; gap:22px; align-content:center; }
+  .price-detail-card{ background:#fff; border:1px solid var(--line); border-radius:20px;
+    padding:26px 28px; box-shadow:0 12px 28px rgba(20,24,33,.06); }
+  .price-detail-card h3{ margin:12px 0 18px; color:var(--ink); font-size:28px; line-height:1.22; }
+  .method-tag{ display:inline-flex; align-items:center; color:#fff; background:var(--cobalt);
+    border-radius:999px; padding:6px 14px; font-size:13px; font-weight:800; }
+  .method-lines{ display:flex; flex-direction:column; gap:12px; }
+  .method-lines p{ margin:0; display:grid; grid-template-columns:104px 1fr; gap:12px;
+    border-top:1px solid var(--line); padding-top:12px; font-size:17px; line-height:1.55; }
+  .method-lines strong{ color:var(--cobalt); font-weight:800; }
+  .method-lines span{ color:var(--gray-700); }
+  .price-detail .callout{ margin:18px 0 0; font-size:18px; }
+
   /* ===================================================================
      Phase 3B · 본문 슬라이드(S17~S26) 레이아웃
      =================================================================== */
@@ -288,28 +319,34 @@
   .s19-slide table.t{ font-size:14px; }
   .s19-slide table.t th, .s19-slide table.t td{ padding:7px 10px; }
   .s19-slide table.t td:first-child{ font-weight:700; color:var(--ink); white-space:nowrap; }
-  /* S24 흔한 오해 표(좌측 넓게 + 코너 스팟, 빨강/파랑 열) */
-  .s24-slide .s-full{ left:64px; right:220px; top:118px; }
-  .s24-slide .asset{ position:absolute; right:18px; top:52%; transform:translateY(-50%); width:185px; }
-  .s24-slide .asset img{ width:100%; height:auto; display:block; }
-  .s24-slide table.t tr:nth-child(even) td{ background:#fff; }
-  .s24-slide table.t td:first-child{ color:var(--red); background:var(--red-soft); font-weight:700; }
-  .s24-slide table.t td:last-child{ color:var(--cobalt); background:#EEF3FF; font-weight:600; }
-  /* S25 코너 스팟 */
-  .asset.s25{ right:40px; bottom:50px; width:330px; }
-  /* S26 클로징 */
-  .s26-recap{ position:absolute; left:64px; top:225px; right:470px; }
-  .s26-recap .s-eyebrow{ color:var(--ice); }
-  .recap3{ display:flex; gap:14px; margin:18px 0; }
-  .recap3 .rc{ flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16);
-    border-radius:16px; padding:16px 14px; }
-  .recap3 .rc b{ display:block; font-size:22px; color:var(--ice); font-weight:800; margin-bottom:4px; }
-  .recap3 .rc span{ font-size:14px; color:#C2C8D2; }
-  .s26-line{ font-size:18px; color:#D6DBE2; margin:0; }
-  .s26-line strong{ color:var(--ice); }
-  .s26-note{ font-size:14px; color:#9AA2AE; line-height:1.6; margin-top:16px; }
-  .s26-note strong{ color:#D6DBE2; }
   .closing .cover-presenter{ color:#9AA2AE; }
+
+  /* S26 세션 요약 인포그래픽 */
+  .session-recap{ position:absolute; left:64px; right:64px; top:116px; bottom:54px;
+    display:flex; flex-direction:column; }
+  .session-recap .s-eyebrow{ color:var(--ice); }
+  .session-recap .s-title{ color:#fff; margin-bottom:14px; }
+  .recap-grid{ flex:1 1 auto; display:grid; grid-template-columns:1.05fr 1.05fr 1fr;
+    grid-template-rows:1fr 1fr; gap:16px; align-content:stretch; }
+  .recap-card{ position:relative; border-radius:18px; padding:20px 22px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16);
+    overflow:hidden; }
+  .recap-card.primary{ grid-row:1/3; background:linear-gradient(180deg,rgba(142,195,255,.18),rgba(48,96,195,.18));
+    border-color:rgba(142,195,255,.45); }
+  .recap-card h3{ margin:0 0 10px; font-size:23px; line-height:1.22; color:#fff; font-weight:800; }
+  .recap-card p{ margin:0; color:#D6DBE2; font-size:16px; line-height:1.5; }
+  .recap-card strong{ color:var(--ice); }
+  .recap-badge{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px;
+    border-radius:50%; background:var(--cobalt); color:#fff; font-size:22px; font-weight:800; margin-bottom:14px; }
+  .recap-mini{ display:flex; gap:10px; margin-top:18px; }
+  .recap-mini span{ flex:1; text-align:center; border-radius:999px; padding:8px 10px;
+    color:#fff; background:rgba(142,195,255,.18); border:1px solid rgba(142,195,255,.35);
+    font-size:14px; font-weight:800; }
+  .recap-flow{ display:flex; align-items:center; gap:8px; margin-top:14px; color:#C9D4E6; font-weight:800; }
+  .recap-flow span{ flex:1; text-align:center; border-radius:12px; background:rgba(255,255,255,.08);
+    padding:10px 8px; font-size:13px; }
+  .recap-flow b{ color:var(--ice); font-size:18px; }
+  .recap-final{ position:absolute; right:22px; bottom:18px; color:#8EC3FF; font-size:13px; font-weight:800; }
 
   /* ===================================================================
      Phase 4 · 하단 여백 제거 — 캔버스 꽉 채우기 (CSS만, 내용 불변)
@@ -320,19 +357,16 @@
   [data-slide="S08"] .s-full, [data-slide="S09"] .s-full,
   [data-slide="S11"] .s-full, [data-slide="S12"] .s-full,
   [data-slide="S13"] .s-full, [data-slide="S15"] .s-full,
-  [data-slide="S19"] .s-full, [data-slide="S21"] .s-full,
-  [data-slide="S24"] .s-full{
+  [data-slide="S19"] .s-full, [data-slide="S21"] .s-full{
     bottom:54px; display:flex; flex-direction:column; }
   [data-slide="S08"] .s-full > *, [data-slide="S09"] .s-full > *,
   [data-slide="S11"] .s-full > *, [data-slide="S12"] .s-full > *,
   [data-slide="S13"] .s-full > *, [data-slide="S15"] .s-full > *,
-  [data-slide="S19"] .s-full > *, [data-slide="S21"] .s-full > *,
-  [data-slide="S24"] .s-full > *{ flex:0 0 auto; }
+  [data-slide="S19"] .s-full > *, [data-slide="S21"] .s-full > *{ flex:0 0 auto; }
   [data-slide="S08"] .s-full > table.t, [data-slide="S09"] .s-full > table.t,
   [data-slide="S11"] .s-full > table.t, [data-slide="S12"] .s-full > table.t,
   [data-slide="S13"] .s-full > table.t, [data-slide="S15"] .s-full > table.t,
-  [data-slide="S19"] .s-full > table.t, [data-slide="S21"] .s-full > table.t,
-  [data-slide="S24"] .s-full > table.t{ flex:1 1 auto; margin-top:14px; }
+  [data-slide="S19"] .s-full > table.t, [data-slide="S21"] .s-full > table.t{ flex:1 1 auto; margin-top:14px; }
   /* 늘어난 행의 셀 내용은 세로 가운데 정렬 */
   [data-slide="S08"] table.t td, [data-slide="S08"] table.t th,
   [data-slide="S09"] table.t td, [data-slide="S09"] table.t th,
@@ -341,24 +375,20 @@
   [data-slide="S13"] table.t td, [data-slide="S13"] table.t th,
   [data-slide="S15"] table.t td, [data-slide="S15"] table.t th,
   [data-slide="S19"] table.t td, [data-slide="S19"] table.t th,
-  [data-slide="S21"] table.t td, [data-slide="S21"] table.t th,
-  [data-slide="S24"] table.t td, [data-slide="S24"] table.t th{ vertical-align:middle; }
+  [data-slide="S21"] table.t td, [data-slide="S21"] table.t th{ vertical-align:middle; }
   /* 내용이 성긴 표는 글씨를 키워 균형 (5열 모델표 S11·S12 제외) */
   [data-slide="S08"] table.t, [data-slide="S09"] table.t,
-  [data-slide="S13"] table.t, [data-slide="S15"] table.t,
-  [data-slide="S24"] table.t{ font-size:17px; }
+  [data-slide="S13"] table.t, [data-slide="S15"] table.t{ font-size:17px; }
   [data-slide="S08"] table.t td, [data-slide="S08"] table.t th,
   [data-slide="S09"] table.t td, [data-slide="S09"] table.t th,
   [data-slide="S13"] table.t td, [data-slide="S13"] table.t th,
-  [data-slide="S15"] table.t td, [data-slide="S15"] table.t th,
-  [data-slide="S24"] table.t td, [data-slide="S24"] table.t th{ padding:14px 14px; }
+  [data-slide="S15"] table.t td, [data-slide="S15"] table.t th{ padding:14px 14px; }
 
   /* 2줄짜리 성긴 표(S08·S09)는 늘리면 셀이 텅 비어 어색 → 제목은 상단 유지,
      편안한 행 높이의 표(+콜아웃)만 남은 공간에서 세로 가운데로 */
   [data-slide="S08"] .s-full > table.t, [data-slide="S09"] .s-full > table.t{
-    flex:0 0 auto; margin-top:auto; }
-  [data-slide="S08"] .s-full > table.t{ margin-bottom:auto; }
-  [data-slide="S09"] .s-full > .callout{ margin-bottom:auto; }
+    flex:0 0 auto; margin-top:20px; }
+  [data-slide="S08"] .s-full > table.t{ margin-bottom:0; }
   [data-slide="S08"] table.t, [data-slide="S09"] table.t{ font-size:18px; }
   [data-slide="S08"] table.t td, [data-slide="S08"] table.t th,
   [data-slide="S09"] table.t td, [data-slide="S09"] table.t th{ padding:26px 16px; }
@@ -373,11 +403,12 @@
     display:flex; flex-direction:column; justify-content:center; }
   /* 3D 에셋을 세로 가운데로 이동 + 확대 */
   [data-slide="S05"] .asset.hero{ display:none; }
+  [data-slide="S05"] .s-body-wrap{ width:650px; }
   [data-slide="S05"] .remind-stack{
     position:absolute; right:52px; top:50%; transform:translateY(-50%);
-    width:470px; height:370px; }
+    width:420px; height:340px; }
   [data-slide="S05"] .remind-stack .ri{
-    position:absolute; width:420px;
+    position:absolute; width:370px;
     border-radius:10px; border:1px solid rgba(0,0,0,.07);
     box-shadow:0 6px 24px rgba(0,0,0,.18); }
   [data-slide="S05"] .remind-stack .ri-back{
@@ -389,6 +420,8 @@
   [data-slide="S17"] .asset.hero, [data-slide="S18"] .asset.hero,
   [data-slide="S22"] .asset.hero, [data-slide="S23"] .asset.hero{
     top:50%; bottom:auto; transform:translateY(-50%); width:500px; }
+  [data-slide="S07"] .asset.hero{ width:470px; right:44px; }
+  [data-slide="S23"] .asset.hero{ width:390px; right:34px; }
   [data-slide="S06"] .asset.hero, [data-slide="S20"] .asset.hero{
     top:50%; bottom:auto; transform:translateY(-50%); width:440px; }
   /* 본문 글씨를 키워 세로 공간을 채움 */
@@ -499,9 +532,10 @@
   .cmp.lean-cmp .tag{ background:var(--cobalt); }
   .cmp h3{ margin:0 0 4px; font-size:26px; font-weight:800; color:var(--ink); }
   .cmp .sub{ font-size:13px; color:var(--gray-400); font-weight:600; margin:0 0 14px; }
-  .cmp ul{ margin:0; padding-left:1.1em; }
-  .cmp li{ font-size:15px; line-height:1.7; color:var(--gray-700); margin:5px 0; }
-  .cmp li strong{ color:var(--cobalt); }
+  .cmp-lines{ display:flex; flex-direction:column; gap:9px; margin:0; }
+  .cmp-lines p{ margin:0; font-size:15px; line-height:1.6; color:var(--gray-700);
+    padding:0 0 0 14px; border-left:3px solid #DCE4FF; }
+  .cmp-lines strong{ color:var(--cobalt); }
   .compare-foot{ font-size:17px; }
   </style>
 </head>
@@ -600,10 +634,10 @@
         <p class="s-eyebrow">PART 1 · BM이 필요한 이유</p>
         <h2 class="s-title">1주차 역기획, <span class="hl">한 발 더</span> 들어갑니다</h2>
         <div class="s-body">
-          <ul>
-            <li>1주차 역기획 마지막 단계 — “기획자가 <strong>수익을 발생시키려 설계한 장치는 어디 있나?</strong>”를 찾아봤죠.</li>
-            <li>그땐 “장치가 어디 있나”까지만. 오늘은 그 장치가 <strong>무슨 종류이고, 왜 골랐고, 뭐가 맞는지</strong>까지 갑니다.</li>
-          </ul>
+          <div class="plain-lines">
+            <p class="plain-line"><strong>1주차에는</strong> “기획자가 <strong>수익을 발생시키려 설계한 장치는 어디 있나?</strong>”를 찾아봤죠.</p>
+            <p class="plain-line"><strong>오늘은</strong> 그 장치가 <strong>무슨 종류인지</strong>, <strong>왜 골랐는지</strong>, 우리 서비스엔 <strong>무엇이 맞는지</strong> 봅니다.</p>
+          </div>
         </div>
       </div>
       <div class="remind-stack">
@@ -648,10 +682,9 @@
             <strong>비즈니스 모델</strong> = 고객 + 문제 + 가치 + 전달 방식 + 비용 구조 + 수익 구조<br>
             <strong>수익 모델</strong> = 그중 “돈이 들어오는 방식” 한 조각 (구독·광고·수수료…)
           </div>
-          <p>2주차의 Why–Who–What–How가 비즈니스 모델의 뼈대입니다.</p>
         </div>
       </div>
-      <img class="asset hero" src="img/slides/s07_revenue-is-one-slice.png" alt="">
+      <img class="asset hero" src="img/slides/s07_bm-contains-revenue.png" alt="">
     </section>
 
     <!-- ============ S08 · 운영 설계도 vs 계산대 ============ -->
@@ -691,11 +724,6 @@
             <tr><th>수익 모델</th><td>월 구독료 + 영상 생성 건당 과금 + 프리미엄 리포트 판매</td></tr>
           </tbody>
         </table>
-        <div class="callout green">
-          <span class="lead">▷ 조별 토론 (2분)</span>
-          “우리 비즈니스 모델은 <strong>구독</strong>입니다.” — 이 문장, 어디가 어색할까요?
-          <span class="note">(힌트: 구독은 ‘돈 받는 방식’일 뿐, 누구의 무슨 문제를 푸는지가 빠졌죠.)</span>
-        </div>
       </div>
       <img class="asset" src="img/slides/s09_ai-revenue-merge.png" alt="">
     </section>
@@ -892,21 +920,21 @@
             <span class="tag">BMC</span>
             <h3>비즈니스 모델 캔버스</h3>
             <p class="sub">Business Model Canvas · 2005, 오스터왈더</p>
-            <ul>
-              <li>사업의 <strong>전체 구조</strong>를 9칸에 그림 (고객·자원·파트너·수익 등)</li>
-              <li>이미 <strong>굴러가는 사업</strong>을 설명·정리하기에 좋음</li>
-              <li>관점: “이 사업은 <strong>어떻게 작동</strong>하나”</li>
-            </ul>
+            <div class="cmp-lines">
+              <p>사업의 <strong>전체 구조</strong>를 9칸에 그립니다.</p>
+              <p>고객, 자원, 파트너, 수익까지 함께 봅니다.</p>
+              <p>이미 <strong>굴러가는 사업</strong>을 설명하기에 좋습니다.</p>
+            </div>
           </div>
           <div class="cmp lean-cmp">
             <span class="tag">Lean Canvas</span>
             <h3>린캔버스</h3>
             <p class="sub">Lean Canvas · 2010, 애시 모리아 — BMC의 스타트업판</p>
-            <ul>
-              <li>BMC를 <strong>초기 아이디어 검증용</strong>으로 다이어트한 버전</li>
-              <li><strong>문제·솔루션·지표·경쟁우위</strong>에 집중해 위험을 빠르게 점검</li>
-              <li>관점: “이 아이디어, <strong>진짜 될까</strong>”</li>
-            </ul>
+            <div class="cmp-lines">
+              <p>BMC를 <strong>초기 아이디어 검증용</strong>으로 줄인 버전입니다.</p>
+              <p><strong>문제, 솔루션, 지표, 경쟁우위</strong>에 집중합니다.</p>
+              <p>관점은 “이 아이디어, <strong>진짜 될까</strong>”입니다.</p>
+            </div>
           </div>
         </div>
         <div class="callout blue compare-foot">우리는 아직 <strong>아이디어를 검증하는 단계</strong> → 그래서 오늘은 <strong>린캔버스</strong>를 씁니다.</div>
@@ -992,15 +1020,15 @@
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
-      <div class="s-body-wrap" style="width:630px;">
+      <div class="s-body-wrap" style="width:730px;">
         <p class="s-eyebrow">PART 4 · Lean Canvas로 정리</p>
         <h2 class="s-title">이 수익이 성립하려면 <span class="hl">무엇이 참이어야 하나?</span></h2>
         <div class="s-body">
           <p>⑥수익원 칸을 채울 때, 팀에서 이렇게 물어보세요.</p>
-          <ul>
-            <li>우리 수익 모델은 15개 중 무엇인가? (5질문으로 근거 대기)</li>
-            <li>돈 내는 사람 = 쓰는 사람인가?</li>
-          </ul>
+          <div class="plain-lines compact">
+            <p class="plain-line"><strong>모델 선택</strong> 우리 수익 모델은 15개 중 무엇인가요? 5가지 질문으로 근거를 댑니다.</p>
+            <p class="plain-line"><strong>지불 주체</strong> 돈 내는 사람과 쓰는 사람은 같은가요?</p>
+          </div>
           <div class="callout orange"><strong>▲ 가장 위험한 가정</strong> — 예: “사장님이 월 3만원을 낼 만큼 효과를 느낀다.” 이게 틀리면 모델이 통째로 무너집니다. 해커톤에서 바로 이걸 검증하세요.</div>
         </div>
       </div>
@@ -1078,42 +1106,105 @@
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
-      <div class="s-body-wrap" style="width:620px;">
+      <div class="s-body-wrap" style="width:780px;">
         <p class="s-eyebrow">보너스 · 가격 전략 (맛보기)</p>
         <h2 class="s-title">가격은 <span class="hl">감이 아니라 전략</span>이다</h2>
         <div class="s-body">
           <p>수익 모델을 정해도 가격을 잘못 매기면 사업성이 무너집니다. 가격엔 <strong>정하는 방법(전략)</strong>이 있어요.</p>
-          <ul>
-            <li><strong>가치 기반 가격</strong> — 원가가 아니라 <strong>고객이 느끼는 가치</strong> 기준 (③고유 가치 제안과 직결).</li>
-            <li>참고 설문 기법: Van Westendorp, Gabor-Granger (이름만 기억).</li>
-          </ul>
+          <div class="plain-lines">
+            <p class="plain-line"><strong>가치 기반 가격</strong> 원가가 아니라 <strong>고객이 느끼는 가치</strong>를 기준으로 가격을 정합니다. ③고유 가치 제안과 바로 연결됩니다.</p>
+          </div>
+          <div class="pricing-methods">
+            <div class="pricing-method">
+              <b>Van Westendorp</b>
+              <span>질문 4개로 <strong>가격 범위</strong>를 보는 방법.</span>
+            </div>
+            <div class="pricing-method">
+              <b>Gabor-Granger</b>
+              <span>가격별 <strong>구매 의사</strong>를 확인하는 방법.</span>
+            </div>
+          </div>
           <div class="callout blue"><strong>핵심</strong> — “가격은 감이 아니라 전략이다.” 오늘은 이 한 문장만 가져가세요.</div>
         </div>
       </div>
       <img class="asset hero" src="img/slides/s23_value-scale.png" alt="">
     </section>
 
-    <!-- ============ S24 · 흔한 오해와 수정 문장 ============ -->
-    <section class="slide s24-slide" data-slide="S24">
+    <!-- ============ S25 · Van Westendorp와 Gabor-Granger ============ -->
+    <section class="slide" data-slide="S25">
       <header class="s-head">
         <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
-      <div class="s-full">
-        <p class="s-eyebrow">마무리 · 발표 전 점검</p>
-        <h2 class="s-title">흔한 오해와 <span class="hl">수정 문장</span></h2>
-        <table class="t">
-          <thead><tr><th style="width:33%;">잘못된 표현</th><th>왜 문제인가</th><th style="width:33%;">더 정확한 표현</th></tr></thead>
-          <tbody>
-            <tr><td>“우리 비즈니스 모델은 구독입니다.”</td><td>구독은 수익 모델 한 조각일 뿐</td><td>“우리는 B2B SaaS이고, 수익 모델은 월 구독형입니다.”</td></tr>
-            <tr><td>“광고 붙이면 수익화됩니다.”</td><td>트래픽·광고주 없으면 광고 수익은 작음</td><td>“반복 트래픽이 일정 규모 이상이면 광고형을 검토할 수 있습니다.”</td></tr>
-            <tr><td>“AI니까 무조건 종량제죠.”</td><td>고객 예측 가능성과 마진 사이 균형 필요</td><td>“AI 사용량에 따라 원가가 변하니, 구독+종량제 결합을 검토합니다.”</td></tr>
-            <tr><td>“MVP는 기능 최소한으로 개발하는 거죠.”</td><td>랜딩페이지·수기 운영도 MVP가 될 수 있음</td><td>“MVP는 핵심 가치를 최소한의 방식으로 검증하는 실험입니다.”</td></tr>
-          </tbody>
-        </table>
+      <div class="s-full price-detail">
+        <p class="s-eyebrow">보너스 · 가격 조사법</p>
+        <h2 class="s-title">가격을 물어보는 <span class="hl">두 가지 방법</span></h2>
+        <div class="price-method-grid">
+          <div class="price-detail-card">
+            <span class="method-tag">Van Westendorp</span>
+            <h3>고객이 받아들이는 가격 범위를 봅니다</h3>
+            <div class="method-lines">
+              <p><strong>묻는 것</strong><span>너무 싸다, 싸다, 비싸다, 너무 비싸다를 각각 묻습니다.</span></p>
+              <p><strong>알 수 있는 것</strong><span>고객이 부담 없이 받아들이는 가격대의 범위를 봅니다.</span></p>
+              <p><strong>쓸 때</strong><span>정확한 가격보다 대략적 범위를 잡을 때 좋습니다.</span></p>
+            </div>
+          </div>
+          <div class="price-detail-card">
+            <span class="method-tag">Gabor-Granger</span>
+            <h3>가격별 구매 의향을 확인합니다</h3>
+            <div class="method-lines">
+              <p><strong>묻는 것</strong><span>가격별로 살 의향이 있는지 묻습니다.</span></p>
+              <p><strong>알 수 있는 것</strong><span>가격이 올라갈수록 구매 의향이 얼마나 줄어드는지 봅니다.</span></p>
+              <p><strong>쓸 때</strong><span>후보 가격 중 설득력 있는 가격을 고를 때 좋습니다.</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="callout blue"><strong>입문 단계에서는</strong> 정확한 정답 가격보다 “고객이 이 정도 가치를 느끼는가?”를 확인하는 용도로 기억하세요.</div>
       </div>
-      <img class="asset" src="img/slides/s24_misconception-fix.png" alt="">
+    </section>
+
+    <!-- ============ S26 · 세션 요약 인포그래픽 ============ -->
+    <section class="slide closing" data-slide="S26">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="session-recap">
+        <p class="s-eyebrow">마무리 · 오늘 가져갈 것</p>
+        <h2 class="s-title">BM을 말할 때는 <span class="hl">돈만</span> 말하지 않습니다</h2>
+        <div class="recap-grid">
+          <div class="recap-card primary">
+            <div class="recap-badge">BM</div>
+            <h3>좋은 기획은 세 가지를 설명합니다</h3>
+            <p><strong>가치</strong>, <strong>수익</strong>, <strong>비용</strong>이 함께 보여야 지속 가능한 서비스가 됩니다.</p>
+            <div class="recap-mini"><span>가치</span><span>수익</span><span>비용</span></div>
+          </div>
+          <div class="recap-card">
+            <div class="recap-badge">1</div>
+            <h3>수익 모델은 한 조각</h3>
+            <p>구독, 광고, 수수료는 BM 전체가 아니라 <strong>돈이 들어오는 방식</strong>입니다.</p>
+          </div>
+          <div class="recap-card">
+            <div class="recap-badge">2</div>
+            <h3>선택과 조합</h3>
+            <p>고객 행동, 지불 주체, 원가 구조에 맞는 모델을 <strong>고르고 섞습니다</strong>.</p>
+          </div>
+          <div class="recap-card">
+            <div class="recap-badge">3</div>
+            <h3>린캔버스 핵심</h3>
+            <div class="recap-flow"><span>⑥ 수익원</span><b>→</b><span>⑦ 비용 구조</span><b>→</b><span>⑧ 핵심 지표</span></div>
+            <p style="margin-top:12px;">오른쪽 돈 구조에 시간을 씁니다.</p>
+          </div>
+          <div class="recap-card">
+            <div class="recap-badge">4</div>
+            <h3>해커톤에서 검증</h3>
+            <p>“무엇이 참이어야 돈이 되는가?”를 <strong>가장 위험한 가정</strong>으로 잡고 확인합니다.</p>
+            <div class="recap-final">다음 질문: 우리 팀 BM은?</div>
+          </div>
+        </div>
+      </div>
     </section>
 
   </div>
@@ -1141,6 +1232,11 @@
     var fsBtn    = document.getElementById('fsBtn');
     var dlBtn    = document.getElementById('dlBtn');
     var idx = 0, hideTimer = null;
+
+    function initialIndex(){
+      var m = String(location.hash || '').match(/slide=(\d+)/i);
+      return m ? Math.max(0, parseInt(m[1], 10) - 1) : 0;
+    }
 
     /* 슬라이드를 화면 크기에 맞게 축소/확대 (1280×720 기준) */
     function fit(){
@@ -1202,7 +1298,7 @@
     window.addEventListener('mousemove', poke);
     window.addEventListener('resize', fit);
 
-    fit(); show(0); poke();
+    fit(); show(initialIndex()); poke();
   })();
   </script>
 </body>
