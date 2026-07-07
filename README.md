@@ -229,6 +229,7 @@ python .claude/skills/likelion-deck/scripts/inline_images.py 세션/사용자리
 
 | 세션 | 주제 | 덱 |
 |---|---|---|
+| [`세션/바이브코딩`](세션/바이브코딩/바이브코딩_강의덱.html) | 바이브 코딩 | HTML 웹덱 |
 | [`세션/BM_수익모델`](세션/BM_수익모델/README.md) | BM — 비즈니스 모델 & 수익 모델 (UXUI 16주차) | 26장 · HTML 웹덱 |
 
 ---

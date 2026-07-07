@@ -73,18 +73,28 @@ def main():
     seen = {}
     for m in re.finditer(r"img/slides/(s(\d+)_([^\"'./]+)\.png)", html):
         fn, no, concept = m.group(1), m.group(2), m.group(3).replace("-", " ")
+        if fn.endswith("-bg.png"):
+            continue  # 배경 이미지(풀블리드)는 수동 — 이 시트는 떠 있는 1:1 에셋만 다룬다
         seen.setdefault(fn, (no, concept))
 
     if not seen:
         print("[정보] img/slides/sNN_*.png 슬롯이 없습니다. 슬라이드에 <img> 슬롯을 먼저 배치하세요.")
 
+    tm = re.search(r"<title>(.*?)</title>", html, re.S)
+    topic = tm.group(1).split("—")[0].strip() if tm else ""
+
     out = Path(args.out) if args.out else deck.parent / "이미지프롬프트.md"
     parts = [
         f"# 이미지 프롬프트 시트 — {deck.name}",
         "",
+    ]
+    if topic:
+        parts += [f"**강의 주제**: {topic} — 각 SUBJECT를 이 주제 맥락에 맞게 채우세요.", ""]
+    parts += [
         "**codex imagegen** 용. 각 항목의 `SUBJECT`(TODO)를 채운 뒤 codex 로 생성하세요.",
         "생성물은 `img/slides/`에 파일명 그대로 저장합니다.",
         "(이 스킬/Claude 는 이미지를 직접 생성하지 않습니다 — 프롬프트만 준비합니다.)",
+        "배경 이미지(`*-bg.png`, 풀블리드 가로)는 이 시트에서 제외됩니다 — 수동으로 준비하세요.",
         "",
     ]
     for fn, (no, concept) in seen.items():

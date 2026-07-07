@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=1280">
   <!-- ✏️ 덱 제목 -->
-  <title>강의덱 제목 — SKU LIKELION</title>
-  <link rel="icon" type="image/png" href="../img/logo.png">
-  <link rel="shortcut icon" type="image/png" href="../img/logo.png">
+  <title>바이브 코딩 — SKU LIKELION</title>
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="shortcut icon" type="image/png" href="img/logo.png">
   <!-- 폰트: Pretendard (한글) — 유일한 외부 의존성 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <!-- 디자인 시스템 + 레이아웃 모듈 -->
-  <link rel="stylesheet" href="../styles/deck.css">
+  <link rel="stylesheet" href="styles/deck.css">
   <!--
     ┌──────────────────────────────────────────────────────────────┐
     │  새 덱 만드는 법                                                │
@@ -31,7 +31,7 @@
     <!-- ============ 1 · 표지 (Cover) ============ -->
     <section class="slide cover" data-slide="S01">
       <header class="s-head cover-head">
-        <img class="s-logo" src="../img/logo.png" alt="">
+        <img class="s-logo" src="img/logo.png" alt="">
         <div class="brand-stack">
           <span class="s-brand on-dark">SKU LIKELION</span>
           <span class="track"><b class="ux">UX/UI</b> TRACK</span>
@@ -39,17 +39,17 @@
         <div class="s-team on-dark">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
       <div class="cover-title">
-        <div class="week">WEEK 00.</div>            <!-- ✏️ 주차 -->
+        <div class="week">WEEK 12.</div>            <!-- ✏️ 주차 -->
         <h1 class="ko">기획 &amp; 디자인</h1>            <!-- 고정: 트랙 제목 (변경 금지 · --title 은 표지 미주입) -->
       </div>
-      <img class="cover-asset" src="../img/main-tiles.png" alt="">   <!-- ✏️ 표지 이미지 -->
-      <div class="cover-presenter">발표자 이름</div>  <!-- ✏️ 발표자 -->
+      <img class="cover-asset" src="img/main-tiles.png" alt="">   <!-- ✏️ 표지 이미지 -->
+      <div class="cover-presenter">노태경 김지유</div>  <!-- ✏️ 발표자 -->
     </section>
 
     <!-- ============ 2 · 도입 (Intro) ============ -->
     <section class="slide s02-slide" data-slide="S02">
       <header class="s-head">
-        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
@@ -63,13 +63,13 @@
           한두 문장으로 소개합니다.
         </div>
       </div>
-      <img class="asset s02" src="../img/slides/s02_intro.png" alt="">   <!-- ✏️ 도입 3D — 주제별로 새로 생성(스캐폴드는 플레이스홀더를 넣음) -->
+      <img class="asset s02" src="img/slides/s02_intro.png" alt="">   <!-- ✏️ 도입 3D — 주제별로 새로 생성(스캐폴드는 플레이스홀더를 넣음) -->
     </section>
 
     <!-- ============ 3 · 아젠다 (Agenda) ============ -->
     <section class="slide s03-slide" data-slide="S03">
       <header class="s-head">
-        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
@@ -90,22 +90,59 @@
       </div>
     </section>
 
-    <!-- ============ PART 1 전환 (part-divider) ============ -->
+    <!-- ============ PART 1 전환 (part-divider) — 해당 파트 콘텐츠 앞으로 이동 ============ -->
     <section class="slide part-divider" data-slide="P1">
       <header class="s-head">
-        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
       <div class="pd-wrap">
         <div class="pd-dots">
-          <span class="pd-dot is-active">1</span>   <!-- ✏️ 현재 파트에 is-active -->
+          <span class="pd-dot is-active">1</span>
           <span class="pd-dot">2</span>
           <span class="pd-dot">3</span>
-          <span class="pd-dot">4</span>
         </div>
-        <p class="pd-eyebrow">PART 1 / 4</p>
-        <h2 class="pd-title">파트 제목</h2>
+        <p class="pd-eyebrow">PART 1 / 3</p>
+        <h2 class="pd-title">파트 1 제목</h2>
+        <p class="pd-sub">이 파트에서 다루는 것 한 줄</p>
+      </div>
+    </section>
+
+    <!-- ============ PART 2 전환 (part-divider) — 해당 파트 콘텐츠 앞으로 이동 ============ -->
+    <section class="slide part-divider" data-slide="P2">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="pd-wrap">
+        <div class="pd-dots">
+          <span class="pd-dot">1</span>
+          <span class="pd-dot is-active">2</span>
+          <span class="pd-dot">3</span>
+        </div>
+        <p class="pd-eyebrow">PART 2 / 3</p>
+        <h2 class="pd-title">파트 2 제목</h2>
+        <p class="pd-sub">이 파트에서 다루는 것 한 줄</p>
+      </div>
+    </section>
+
+    <!-- ============ PART 3 전환 (part-divider) — 해당 파트 콘텐츠 앞으로 이동 ============ -->
+    <section class="slide part-divider" data-slide="P3">
+      <header class="s-head">
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="pd-wrap">
+        <div class="pd-dots">
+          <span class="pd-dot">1</span>
+          <span class="pd-dot">2</span>
+          <span class="pd-dot is-active">3</span>
+        </div>
+        <p class="pd-eyebrow">PART 3 / 3</p>
+        <h2 class="pd-title">파트 3 제목</h2>
         <p class="pd-sub">이 파트에서 다루는 것 한 줄</p>
       </div>
     </section>
@@ -120,7 +157,7 @@
     <!-- [예시] 본문+일러스트 (center-v) — 지우고 시작하세요 -->
     <section class="slide center-v" data-slide="B01">
       <header class="s-head">
-        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
@@ -132,7 +169,7 @@
           <div class="callout blue"><strong>핵심</strong> — 한 슬라이드에 한 메시지.</div>
         </div>
       </div>
-      <img class="asset hero" src="../img/slides/s10_revenue-menu.png" alt="">
+      <img class="asset hero" src="img/slides/s10_revenue-menu.png" alt="">
     </section>
 
     <!-- ▲▲▲ 본문 슬롯 끝 ▲▲▲ -->
@@ -143,9 +180,9 @@
          아래 <img class="concept-bg"> 주석을 풀고 파일을 img/slides/ 에 넣으세요.
          없어도 밝은 배경으로 깔끔합니다. 다크 마무리를 원하면 카탈로그의 closing 을 뒤에 추가. -->
     <section class="slide concept-recap" data-slide="END">
-      <!-- <img class="concept-bg" src="../img/slides/sNN_recap-bg.png" alt=""> -->   <!-- ✏️ 배경(선택·수동) -->
+      <!-- <img class="concept-bg" src="img/slides/sNN_recap-bg.png" alt=""> -->   <!-- ✏️ 배경(선택·수동) -->
       <header class="s-head">
-        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <img class="s-logo" src="img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
         <span class="s-line"></span>
         <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
       </header>
@@ -190,7 +227,7 @@
     var fsBtn    = document.getElementById('fsBtn');
     var dlBtn    = document.getElementById('dlBtn');
     var idx = 0, hideTimer = null;
-    var storageKey = 'sku-deck-slide';   /* ✏️ 덱마다 고유 문자열로 바꾸면 위치 기억이 분리됨 */
+    var storageKey = 'sku-deck-바이브코딩';   /* ✏️ 덱마다 고유 문자열로 바꾸면 위치 기억이 분리됨 */
 
     function initialIndex(){
       var m = String(location.hash || '').match(/slide=(\d+)/i);

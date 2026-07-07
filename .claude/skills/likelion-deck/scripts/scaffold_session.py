@@ -33,9 +33,14 @@ CSS = "styles/deck.css"
 ESSENTIAL_IMAGES = [
     "logo.png",
     "main-tiles.png",
-    "slides/s02_bm-puzzle.png",
-    "slides/s10_revenue-menu.png",
+    "slides/s10_revenue-menu.png",   # 스타터 예시(center-v) 데모 — 지우고 시작
 ]
+
+# 킷 파일 → 세션 내 '다른 이름'으로 복사. 도입(2p) 슬롯은 BM 아트가 아니라
+# 중립 플레이스홀더로 채워, 주제별로 새로 생성해야 함이 한눈에 보이게 한다.
+RENAMED_IMAGES = {
+    "_placeholder.png": "slides/s02_intro.png",
+}
 
 
 def find_root(start: Path) -> Path:
@@ -60,8 +65,7 @@ def inject_slots(html: str, week, title, presenter, topic) -> str:
     if week:
         wk = str(week) if str(week).upper().startswith("WEEK") else f"WEEK {week}."
         html = html.replace('<div class="week">WEEK 00.</div>', f'<div class="week">{wk}</div>')
-    if title:
-        html = html.replace('<h1 class="ko">강의 제목</h1>', f'<h1 class="ko">{title}</h1>')
+    # 표지 한글 제목은 '기획 & 디자인'으로 고정 — --title 은 <title>·README 라벨에만 쓴다(표지 미주입).
     if presenter:
         html = html.replace('<div class="cover-presenter">발표자 이름</div>',
                             f'<div class="cover-presenter">{presenter}</div>')
@@ -141,7 +145,7 @@ def main():
     ap = argparse.ArgumentParser(description="새 강의덱 세션 스캐폴딩")
     ap.add_argument("--topic", required=True, help="세션 폴더명 (예: 사용자리서치기초)")
     ap.add_argument("--week", default="", help="주차 (예: 12)")
-    ap.add_argument("--title", default="", help="표지 한글 제목")
+    ap.add_argument("--title", default="", help="제목(브라우저 탭 <title>·README 라벨용; 표지엔 '기획 & 디자인' 고정)")
     ap.add_argument("--presenter", default="", help="발표자 이름들")
     ap.add_argument("--deck-name", default="", help="덱 파일명 (기본: <topic>_강의덱.html)")
     ap.add_argument("--parts", type=int, default=1,
@@ -185,6 +189,16 @@ def main():
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
 
+    # 이름 바꿔 복사 (도입 슬롯 → 중립 플레이스홀더). --all-demo-images 여부와 무관.
+    for src_rel, dest_rel in RENAMED_IMAGES.items():
+        src = kit / "img" / src_rel
+        if src.exists():
+            dest = sess / "img" / dest_rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+        else:
+            print(f"[경고] 플레이스홀더 없음: {src}")
+
     # _redirects (Netlify: 루트 → 배포본)
     deploy_name = (deck_name[:-5] if deck_name.endswith(".html") else deck_name) + "_배포.html"
     (sess / "_redirects").write_text(f"/  /{deploy_name}  200\n", encoding="utf-8")
@@ -195,6 +209,7 @@ def main():
     print(f"  · 덱: {deck_name}  (고정 1·2·3 · 하단 네비바 · 첫 페이지 PDF버튼 그대로)")
     print(f"  · part-divider {args.parts}개 (아젠다 뒤 — 조립 시 각 파트 콘텐츠 앞으로 이동)")
     print("  · styles/deck.css · img/(placeholder) · _redirects")
+    print("  · 도입(2p)=s02_intro.png 플레이스홀더 → 주제별로 새로 생성 · 마무리=concept-recap(배경 이미지는 선택·수동)")
     print("\n다음: 슬라이드 조립(시각화 우선) → make_prompt_sheet.py → 프리뷰(8532) → (선택)inline_images.py")
 
 

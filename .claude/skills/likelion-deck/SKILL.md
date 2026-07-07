@@ -30,7 +30,7 @@ description: >-
 
 아래 **다섯**은 **모든 생성 덱에서 원본 그대로** 유지한다. 재작성하지 말고 스타터에서 **바이트 그대로** 가져간다. `scaffold_session.py`가 이를 보장하므로, 손으로 덱을 편집할 때도 이 부분은 건드리지 않는다.
 
-1. **고정 페이지 1·2·3 (표지·도입·아젠다)** — `.cover` / `.s02-slide` / `.s03-slide` 의 구조·CSS 그대로. 바꾸는 건 지정 텍스트 슬롯(주차·한글 제목·발표자·아젠다 4항목)과 이미지 파일명뿐. **마크업/클래스/레이아웃 재구성 금지.**
+1. **고정 페이지 1·2·3 (표지·도입·아젠다)** — `.cover` / `.s02-slide` / `.s03-slide` 의 구조·CSS 그대로. 바꾸는 건 지정 텍스트 슬롯(주차·발표자·아젠다 4항목)과 이미지 파일명뿐. **마크업/클래스/레이아웃 재구성 금지.** **표지 한글 제목은 `기획 & 디자인`으로 고정**(덱마다 안 바뀜 — `--title`은 브라우저 탭 `<title>`·README 라벨에만). 단 **도입(2p) 이미지는 고정이 아니라 주제별로 새로 생성**한다 — 스캐폴드가 넣는 중립 플레이스홀더 `s02_intro.png`를 표지처럼 주제 3D 에셋으로 교체(4단계에서 자동 프롬프트됨).
 2. **하단 네비게이션 바** — `.controls > .navbar`(‹ · 카운터 · › · 전체화면 ⛶). 그대로.
 3. **첫 페이지 전용 PDF 버튼** — `.dl-btn`(`window.print()`), 엔진의 `dlBtn.style.display = (idx===0) ? '' : 'none'`로 **표지에서만** 표시. 그대로.
 4. **이미지는 이 스킬이 생성하지 않는다** — 3D 에셋(표지 포함)은 **codex imagegen**으로 만든다. 이 스킬은 **프롬프트 시트를 산출·핸드오프**하는 데서 멈춘다. OpenAI를 직접 호출하지 않는다.
@@ -71,6 +71,8 @@ python .claude/skills/likelion-deck/scripts/make_prompt_sheet.py 세션/<폴더�
 ```
 이 명령이 덱의 이미지 슬롯을 스캔해 **Codex용 프롬프트 시트**(`세션/<폴더명>/이미지프롬프트.md`)를 만든다. 각 항목의 `SUBJECT`(그릴 대상)를 채운다 — 4블록 계약은 `references/image-and-deploy.md`(→ `덱_템플릿킷/images/공통이미지프롬프트.md`). **실제 생성은 사용자가 codex imagegen으로 실행**한다. 이 스킬은 여기서 멈춘다.
 
+> **두 특수 슬롯**: **도입(2p)**은 `s02_intro.png` 플레이스홀더 → 이 흐름으로 자동 프롬프트되어 주제 3D로 교체된다. **마무리 `concept-recap`의 배경 이미지(`*-bg.png`)는 수동** — 떠 있는 1:1 에셋이 아니라 **풀블리드 가로(≈16:9, 왼쪽 ~45% 비워 패널 가독)**라 계약이 다르다. 프롬프트 시트가 `*-bg.png`를 **제외**하니 직접 준비한다(없어도 밝은 배경으로 깔끔).
+
 ### 5. 검증
 `.claude/launch.json`의 `static`(포트 8532)로 프리뷰한 뒤 preview 도구로 확인한다:
 - 콘솔 에러 0 · 깨진 이미지 0(`img.naturalWidth===0` 없음) · 슬라이드 수 일치
@@ -100,4 +102,4 @@ python .claude/skills/likelion-deck/scripts/inline_images.py 세션/<폴더명>/
 - **고정(그대로)**: `cover` · `s02-slide` · `s03-slide` · `part-divider`
 - **텍스트형**: `center-msg-a` · `center-msg-b` · `center-v`(좌 본문+우 3D) · `remind-slide` · `three-card center-v` · `tbl canvas-fill`(+`note-grid`/`tag-block`) · `card-grid`(+`wide-12`)
 - **도형형(시각화 우선)**: `venn-slide` · `actor-slide` · `compare-slide` · `flow-slide` · `reverse-slide` · `lean-slide canvas-fill` · `risk-slide` · `metric-slide canvas-fill` · `map-slide` · `price-slide`
-- **클로징**: `concept-recap` · `closing`
+- **클로징**: `concept-recap`(기본 — 밝은 배경 + 요약 인포그래픽, 스타터가 이걸로 끝남) · `closing`(선택 — 다크 한 줄, recap 뒤에 카탈로그에서 추가)
