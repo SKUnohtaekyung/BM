@@ -1,0 +1,64 @@
+{
+  "skill_name": "likelion-deck",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "다음 주차 주제 '사용자 리서치 기초'로 강의덱 새로 만들어줘. 12주차고, 4개 파트로 하고 표지랑 아젠다까지 잡아줘.",
+      "expected_output": "세션/<주제>/ 폴더가 스캐폴딩되고 고정 1·2·3(표지·도입·아젠다)이 주차/제목으로 채워지며, 4개 part-divider가 들어가고, 하단 네비바+첫 페이지 PDF 버튼이 그대로 보존된다. 이미지 경로는 img/(세션 로컬).",
+      "files": [],
+      "assertions": [
+        {"text": "세션/<주제>/ 폴더와 덱 HTML이 생성된다", "type": "manual"},
+        {"text": "덱에 ../img/ 나 ../styles 잔재가 없다(세션 로컬 경로 img/, styles/)", "type": "script"},
+        {"text": "표지에 WEEK 12 와 제목이 주입되고 WEEK 00 placeholder가 남지 않는다", "type": "script"},
+        {"text": ".controls .navbar(하단 네비바)와 .dl-btn(PDF)이 존재하고, PDF는 첫 페이지에서만 표시된다", "type": "script"},
+        {"text": "part-divider 가 4개 있다", "type": "script"},
+        {"text": "고정 1·2·3 마크업이 스타터와 구조 동일(cover/s02-slide/s03-slide)", "type": "script"},
+        {"text": "루트 README 세션 목록에 행이 추가된다", "type": "script"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "우리 서비스의 '핵심 지표가 매출을 어떻게 결정하는지'를 한 장으로 보여줘. 구독형이면 이탈률, 광고형이면 트래픽처럼.",
+      "expected_output": "관계/매핑 정보이므로 텍스트 불릿이 아니라 도형 레이아웃(map-slide/metric-slide/flow-slide 등)으로 시각화한다. deck.css의 실제 클래스를 쓰고 헤더 골격을 유지.",
+      "files": [],
+      "assertions": [
+        {"text": "결과가 텍스트 불릿 나열이 아니라 도형 레이아웃 클래스(map-slide/metric-slide/flow-slide/venn-slide 등)를 사용한다", "type": "manual"},
+        {"text": "deck.css에 실제로 존재하는 클래스만 사용한다", "type": "script"},
+        {"text": ".s-head 헤더 골격을 포함한다", "type": "script"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "지금 만드는 덱에 'BMC랑 린캔버스 두 개를 비교하는' 슬라이드 한 장 넣어줘.",
+      "expected_output": "compare-slide 레이아웃(.cmp 2개, 한쪽 .lean-cmp 강조)을 카탈로그에서 가져와 내용만 교체.",
+      "files": [],
+      "assertions": [
+        {"text": "compare-slide 클래스를 사용한다", "type": "script"},
+        {"text": ".cmp 카드가 2개이고 한쪽이 강조(.lean-cmp)된다", "type": "script"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "이 덱 슬라이드들에 들어갈 3D 일러스트 준비해줘.",
+      "expected_output": "이미지를 직접 생성하지 않고(codex imagegen 소관) make_prompt_sheet.py로 Codex 포맷 프롬프트 시트(이미지프롬프트.md)를 만든다. 4블록·투명PNG·NEGATIVE(no text/numbers) 포함.",
+      "files": [],
+      "assertions": [
+        {"text": "OpenAI/이미지 생성 API를 호출하지 않는다", "type": "manual"},
+        {"text": "이미지프롬프트.md(Codex 포맷: ## S## · 파일명 · text 블록)를 산출한다", "type": "script"},
+        {"text": "프롬프트에 투명 PNG, #0066CC, NEGATIVE(no text/numbers)가 포함된다", "type": "script"},
+        {"text": "파일명이 sNN_<concept>.png 규칙을 따른다", "type": "script"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "이 덱 이메일로 보낼 수 있게 이미지 다 박은 단일 파일로 만들어줘.",
+      "expected_output": "inline_images.py로 base64 인라인한 <덱>_배포.html 생성. 남은 src=\"img/ 참조 0, 원본 dev 파일 불변.",
+      "files": [],
+      "assertions": [
+        {"text": "<덱>_배포.html이 생성된다", "type": "script"},
+        {"text": "배포본에 남은 src=\"img/ 또는 url(img/ 참조가 0이다(전부 data:)", "type": "script"},
+        {"text": "원본 dev 덱은 여전히 img/ 를 참조(불변)", "type": "script"}
+      ]
+    }
+  ]
+}

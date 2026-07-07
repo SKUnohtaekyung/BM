@@ -1,0 +1,657 @@
+/* =====================================================================
+   SKU LIKELION 강의덱 — 디자인 시스템 + 레이아웃 모듈 (재사용 템플릿)
+   ---------------------------------------------------------------------
+   원본: BM_수익모델_강의덱.html 에서 추출.
+   핵심 변경: 원본의 슬라이드 번호 스코핑 [data-slide="Sxx"] 을
+             재사용 가능한 "타입 클래스"(.venn-slide, .center-v 등)로 치환.
+             → 슬라이드가 몇 번째에 있든 레이아웃이 동일하게 렌더됨.
+   좌표계: 1280 × 720 고정 캔버스.
+   ===================================================================== */
+
+/* ===================================================================
+   §1 색상 토큰 + 캔버스 변수
+   =================================================================== */
+:root{
+  --sw:1280px; --sh:720px;
+  --white:#FFFFFF;
+  --cover-bg:#1A1A1A;     /* 표지·클로징 배경 */
+  --ink:#141821;          /* 본문 기본 잉크 */
+  --black:#000000;        /* 큰 제목 */
+  --cobalt:#3060C3;       /* 주 강조(UI) */
+  --electric:#2F6BF8;     /* 표지 UX/UI */
+  --ice:#8EC3FF;          /* 헤더 라인·표지 한글 타이틀 */
+  --periwinkle:#92ADF1;   /* 3D 에셋 보조 */
+  --navy:#233B66;         /* 3D 에셋 깊이 */
+  --gray-700:#4F4F4F;     /* 본문 보조 */
+  --gray-400:#9A9A9A;     /* 캡션 */
+  --surface:#F3F5F8;      /* 카드/패널 */
+  --line:#E5E8F0;         /* 구분선 */
+  --th:#F2F5FB;           /* 표 헤더 배경 */
+  --blue-soft:#EEF2FF;    /* 파란 콜아웃 */
+  --green:#0F766E; --green-soft:#E8F7F5;
+  --yellow-soft:#FFF8DB; --yellow-line:#F3E5A6;
+  --orange:#F84818; --orange-soft:#FFF1EA;
+  --red:#D80000; --red-soft:#FFF1F0;
+  --orange-bold:#B9471E;  /* 오렌지 볼드 텍스트(토큰 승격) */
+}
+
+/* ===================================================================
+   §2 슬라이드 프레임 · 화면 발표 모드 · 인쇄
+   =================================================================== */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ font-family:"Pretendard","Pretendard Variable",-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  letter-spacing:-0.02em; color:var(--ink); }
+.slide{ position:relative; width:var(--sw); height:var(--sh); overflow:hidden;
+  background:#fff; break-after:page; }
+.slide:last-child{ break-after:auto; }
+
+/* 화면: 발표 모드 — 한 번에 한 장, 좌우 방향키로 이동 */
+@media screen{
+  html,body{ height:100%; }
+  body{ background:#0d0f13; padding:0; overflow:hidden; }
+  .deck{ display:block; height:100vh; }
+  .slide{ position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(var(--scale,1));
+    box-shadow:0 24px 70px rgba(0,0,0,.6); border-radius:6px;
+    display:none; }
+  .slide.is-active{ display:block; }
+}
+@media print{
+  @page{ size:1280px 720px; margin:0; }
+  html,body,.slide,.slide *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ background:#fff; padding:0; }
+  .deck{ display:block; gap:0; }
+  .slide{ box-shadow:none; border-radius:0; margin:0; }
+  .dl-btn, .controls{ display:none !important; }
+}
+
+/* ===================================================================
+   §3 크롬 — PDF 버튼 · 방향키 리모컨
+   =================================================================== */
+.dl-btn{ position:fixed; right:22px; bottom:22px; z-index:99;
+  background:var(--cobalt); color:#fff; border:0; border-radius:999px;
+  padding:14px 22px; font:700 16px/1 "Pretendard",sans-serif; cursor:pointer;
+  box-shadow:0 10px 26px rgba(48,96,195,.45); }
+.dl-btn:hover{ filter:brightness(1.06); }
+.controls{ opacity:0; transition:opacity .35s ease; }
+.controls:not(.show){ pointer-events:none; }
+.controls.show{ opacity:1; }
+.navbar{ position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:99;
+  display:flex; align-items:center; gap:12px;
+  background:rgba(20,24,33,.72); border-radius:999px; padding:8px 12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.45); backdrop-filter:blur(6px); }
+.nav-btn{ width:40px; height:40px; border:0; border-radius:50%; cursor:pointer;
+  background:var(--cobalt); color:#fff; font:700 24px/1 "Pretendard",sans-serif;
+  display:grid; place-items:center; padding:0; }
+.nav-btn:hover{ filter:brightness(1.1); }
+.nav-btn:disabled{ opacity:.35; cursor:default; }
+.nav-counter{ color:#fff; font:700 15px/1 "Pretendard",sans-serif;
+  min-width:58px; text-align:center; letter-spacing:.02em; }
+.nav-sep{ width:1px; height:22px; background:rgba(255,255,255,.25); margin:0 2px; }
+.nav-btn.fs{ font-size:20px; }
+
+/* ===================================================================
+   §4 상단 헤더 (표준 + 표지/클로징 변형)
+   =================================================================== */
+.s-head{ position:absolute; top:34px; left:56px; right:56px; height:40px;
+  display:flex; align-items:center; gap:14px; }
+.s-logo{ width:40px; height:40px; object-fit:contain; }
+.s-brand{ font-weight:800; font-size:30px; color:var(--black); letter-spacing:-.01em; }
+.s-line{ flex:1; height:2px; background:var(--ice); margin:0 18px; border-radius:2px; }
+.s-team{ font-size:16px; line-height:1.35; color:var(--ink); text-align:right;
+  white-space:nowrap; font-weight:500; }
+.s-head.cover-head{ align-items:flex-start; }
+.cover-head .s-line{ display:none; }
+.s-brand.on-dark, .s-team.on-dark{ color:#fff; }
+.brand-stack{ display:flex; flex-direction:column; gap:2px; }
+.track{ font:800 26px/1 "Pretendard",sans-serif; color:#fff; }
+.track .ux{ color:var(--electric); }
+
+/* ===================================================================
+   §5 본문 골격 · eyebrow · 제목 · 강조 바 · 본문 텍스트
+   =================================================================== */
+.s-body-wrap{ position:absolute; left:64px; top:132px; width:560px; }
+.s-eyebrow{ font-weight:700; font-size:17px; color:var(--cobalt); margin:0 0 10px; }
+.s-title{ font-weight:800; font-size:44px; line-height:1.18; color:var(--black);
+  letter-spacing:-.035em; margin:0 0 18px; }
+.s-title .hl{ color:var(--cobalt); }
+.accent-bar{ width:120px; height:14px; border-radius:8px; background:var(--cobalt);
+  margin:6px 0 22px; }
+.s-lead{ font-weight:700; font-size:26px; color:var(--ink); margin:0 0 16px; }
+.s-title, .cm-title, .s-lead, .s-body, .callout, .card, table.t th, table.t td,
+.plain-line, .pricing-method, .price-detail-card, .cmp, .lc, .metric, .mapc,
+.recap-card{ word-break:keep-all; overflow-wrap:normal; }
+.s-body{ font-size:19px; line-height:1.7; color:var(--gray-700); }
+.s-body strong{ color:var(--cobalt); font-weight:700; }
+.s-body p{ margin:0 0 12px; }
+.s-body ul{ margin:0 0 12px; padding-left:0; list-style:none; }
+.s-body li{ margin:8px 0; }
+.s-body .plain-lines{ display:flex; flex-direction:column; gap:14px; margin:4px 0; }
+.s-body .plain-line{ margin:0; padding:16px 18px; border-radius:14px;
+  background:#fff; border:1px solid var(--line); line-height:1.62; }
+.s-body .plain-line strong:first-child{ display:block; color:var(--ink); margin-bottom:4px; }
+.s-body .plain-lines.compact{ gap:10px; margin:8px 0 16px; }
+.s-body .plain-lines.compact .plain-line{ padding:13px 16px; font-size:18px; }
+.orange-bold{ color:var(--orange-bold) !important; font-weight:800; }
+
+/* ===================================================================
+   §6 번호 원형 · 아젠다 항목
+   =================================================================== */
+.num-circle{ width:64px; height:64px; border-radius:50%; background:var(--cobalt);
+  color:#fff; font-weight:800; font-size:26px; display:grid; place-items:center; flex:0 0 auto; }
+.agenda-item{ display:flex; gap:22px; align-items:flex-start; }
+.agenda-item h3{ margin:0 0 4px; font-size:26px; font-weight:800; color:var(--cobalt); }
+.agenda-item p{ margin:0; font-size:18px; color:var(--gray-700); }
+
+/* ===================================================================
+   §7 콜아웃 · 카드 · pill · 타이밍 · 표
+   =================================================================== */
+.callout{ border-radius:16px; padding:16px 20px; margin:14px 0; border:1px solid var(--line);
+  background:#fbfcff; font-size:17px; line-height:1.6; }
+.callout strong{ color:var(--cobalt); }
+.callout.blue{ background:var(--blue-soft); border-color:#DCE4FF; }
+.callout.green{ background:var(--green-soft); border-color:#C9EBE6; }
+.callout.orange{ background:var(--orange-soft); border-color:#FFD9C7; }
+.callout.orange strong{ color:var(--orange-bold); }
+.callout.yellow{ background:var(--yellow-soft); border-color:var(--yellow-line); }
+.callout.red{ background:var(--red-soft); border-color:#FFD0CC; }
+.callout .lead{ display:block; font-weight:800; color:var(--cobalt); margin-bottom:6px; }
+.callout.green .lead{ color:var(--green); }
+.callout .note{ color:var(--gray-400); font-size:14px; }
+
+.card{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:20px; }
+.card.surface{ background:var(--surface); }
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+
+.pill{ display:inline-flex; align-items:center; border:1px solid var(--line); background:#fff;
+  color:var(--gray-700); border-radius:999px; padding:7px 12px; font-size:13px; font-weight:700; }
+.timing{ display:inline-block; font-size:14px; font-weight:800; color:var(--cobalt);
+  background:var(--blue-soft); border-radius:999px; padding:5px 12px; margin:0 0 10px; }
+.hot{ display:inline-block; font-size:11px; font-weight:800; padding:2px 7px; border-radius:999px;
+  background:var(--orange-soft); color:var(--orange-bold); margin-left:6px; vertical-align:middle; }
+.key{ display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--cobalt);
+  border-radius:999px; padding:1px 8px; margin-left:5px; vertical-align:middle; }
+
+table.t{ width:100%; border-collapse:collapse; font-size:15px; border-radius:12px; overflow:hidden; }
+table.t th,table.t td{ border:1px solid var(--line); padding:10px 12px; vertical-align:top; text-align:left; }
+table.t th{ background:var(--th); color:var(--cobalt); font-weight:800; white-space:nowrap; }
+table.t tr:nth-child(even) td{ background:#fcfdff; }
+.model-table td:nth-child(1){ text-align:center; font-weight:800; color:var(--cobalt); }
+.model-table td:nth-child(2){ font-weight:800; color:var(--ink); }
+
+/* ===================================================================
+   §8 3D 에셋 배치 헬퍼
+   =================================================================== */
+.asset{ position:absolute; }
+.asset.hero{ right:40px; bottom:56px; width:430px; }
+.asset.spot{ right:48px; top:120px; width:240px; }
+.asset img{ width:100%; height:auto; display:block; }
+
+/* ===================================================================
+   §9 풀폭 본문 · 센터 메시지 · 페이지 번호
+   =================================================================== */
+.s-full{ position:absolute; left:64px; right:64px; top:118px; }
+.center-msg{ position:absolute; left:64px; right:64px; top:196px; max-width:900px; }
+.cm-title{ font-weight:800; font-size:52px; line-height:1.22; letter-spacing:-.04em;
+  color:var(--black); margin:0 0 22px; }
+.cm-title .hl{ color:var(--cobalt); }
+.cm-sub{ font-size:22px; font-weight:600; color:var(--gray-700); margin:0 0 14px; }
+.s-foot{ position:absolute; right:56px; bottom:24px; color:var(--gray-400);
+  font:600 13px/1 "Pretendard",sans-serif; }
+
+/* ===================================================================
+   §10 재사용 모디파이어 — 캔버스 꽉 채우기 / 본문 세로 가운데
+   (원본 Phase 4 그룹 A·B·C 를 타입 무관 모디파이어로 일반화)
+   =================================================================== */
+/* .canvas-fill : .s-full 안의 표/그리드가 남은 세로 공간을 채움 (표·카드그리드·린캔버스·지표·맵) */
+.canvas-fill .s-full{ bottom:54px; display:flex; flex-direction:column; }
+.canvas-fill .s-full > *{ flex:0 0 auto; }
+.canvas-fill .s-full > table.t{ flex:1 1 auto; margin-top:14px; }
+.canvas-fill table.t td, .canvas-fill table.t th{ vertical-align:middle; }
+
+/* .center-v : 본문 컬럼을 세로 가운데 정렬 + hero 3D 확대 (본문+일러스트 슬라이드) */
+.center-v .s-body-wrap{ top:112px; bottom:54px; height:auto;
+  display:flex; flex-direction:column; justify-content:center; }
+.center-v .asset.hero{ top:50%; bottom:auto; transform:translateY(-50%); width:500px; }
+.center-v .s-body{ font-size:21px; line-height:1.8; }
+.center-v .callout{ font-size:18px; padding:18px 22px; }
+
+/* ===================================================================
+   §11 표지 (Cover) — 고정 페이지 1 · img/1page.png 재현
+   =================================================================== */
+.cover{ background:var(--cover-bg); }
+.cover-title{ position:absolute; left:64px; top:300px; }
+.cover-title .week{ color:#fff; font:800 40px/1 "Pretendard",sans-serif; }
+.cover-title .ko{ color:var(--ice); font:800 64px/1.1 "Pretendard",sans-serif; margin:14px 0 0; }
+.cover-asset{ position:absolute; right:-35px; bottom:-48px; width:930px; }
+.cover-presenter{ position:absolute; right:56px; bottom:40px; color:#C9CDD3;
+  font:500 20px/1 "Pretendard",sans-serif; }
+/* 표지 헤더 미세 보정 */
+.cover .s-head{ top:46px; align-items:center; }
+.cover-head .s-logo{ width:70px; height:70px; }
+.cover .s-brand{ font-size:40px; }
+.cover .track{ font-size:40px; }
+.cover-head .s-team{ margin-left:auto; font-size:20px; line-height:1.45; }
+
+/* ===================================================================
+   §12 도입 (Intro) — 고정 페이지 2 · img/2page.png 재현
+   =================================================================== */
+.s02-slide .s-body-wrap{ left:72px; top:150px; width:900px; }
+.s02-slide .s-eyebrow{ font-size:32px; margin:0 0 18px; }
+.s02-slide .s-title{ font-size:58px; line-height:1.1; white-space:nowrap; margin:0 0 26px; }
+.s02-slide .s-lead{ font-size:30px; margin:0 0 26px; }
+.s02-slide .s-body{ font-size:22px; line-height:1.7; }
+.asset.s02{ right:10px; bottom:30px; width:580px; }
+
+/* ===================================================================
+   §13 아젠다 (Agenda) — 고정 페이지 3 · img/3page.png 재현
+   =================================================================== */
+.s03-slide .s-body-wrap{ left:72px; top:230px; width:540px; }
+.s03-slide .s-title{ font-size:54px; margin:0; }
+.s03-slide .accent-bar{ width:150px; height:16px; margin:22px 0 30px; }
+.s03-slide .s-body{ font-size:25px; line-height:1.75; font-weight:600; color:var(--ink); }
+.s03-list{ position:absolute; left:670px; top:150px; bottom:90px; right:48px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+.s03-list .agenda-item{ gap:24px; }
+.s03-list .agenda-item h3{ font-size:30px; }
+.s03-list .agenda-item p{ font-size:21px; margin-top:6px; line-height:1.4; }
+
+/* ===================================================================
+   §14 파트 전환 (Part Divider) — 중앙 정렬 + 진행 도트
+   =================================================================== */
+.part-divider .pd-wrap{ position:absolute; left:64px; right:64px; top:118px; bottom:54px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.pd-dots{ display:flex; align-items:center; gap:14px; margin:0 0 28px; }
+.pd-dot{ width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:16px; color:var(--gray-400); background:#fff; border:2px solid var(--line); }
+.pd-dot.is-active{ color:#fff; background:var(--cobalt); border-color:var(--cobalt);
+  box-shadow:0 8px 18px rgba(48,96,195,.35); }
+.pd-eyebrow{ font-size:18px; font-weight:800; color:var(--cobalt); letter-spacing:.06em; margin:0 0 14px; }
+.pd-title{ font-size:56px; font-weight:800; letter-spacing:-.03em; color:var(--ink); margin:0 0 18px; line-height:1.2; }
+.pd-sub{ font-size:22px; font-weight:600; color:var(--gray-700); margin:0; max-width:720px; }
+
+/* ===================================================================
+   §15 클로징 (Closing) — 어두운 배경 변형
+   =================================================================== */
+.closing{ background:var(--cover-bg); }
+.closing .s-brand, .closing .s-team{ color:#fff; }
+.closing .s-title{ color:#fff; }
+.closing .s-body{ color:#D6DBE2; }
+.closing .s-body strong{ color:var(--ice); }
+.closing .cover-presenter{ color:#9AA2AE; }
+
+/* =====================================================================
+   ██  레이아웃 모듈  ██  — 상황별 재사용 레이아웃
+   각 모듈은 고유 타입 클래스(.slide 에 부여)로 스코프됨.
+   ===================================================================== */
+
+/* ===================================================================
+   [텍스트] 센터 메시지 A (.center-msg-a) — 큰 한 문장 + 콜아웃
+   =================================================================== */
+.center-msg-a .center-msg{ max-width:700px; top:110px; bottom:54px;
+  display:flex; flex-direction:column; justify-content:center; }
+.center-msg-a .cm-title{ font-size:52px; }
+.center-msg-a .callout{ font-size:22px; padding:24px 28px; }
+.center-msg-a .asset.center-art{ right:10px; top:50%; bottom:auto;
+  transform:translateY(-50%); width:560px; }
+
+/* ===================================================================
+   [텍스트] 센터 메시지 B (.center-msg-b) — 서브라벨 + 큰 질문 + 콜아웃
+   =================================================================== */
+.center-msg-b .center-msg{ max-width:760px; top:110px; bottom:54px;
+  display:flex; flex-direction:column; justify-content:flex-start; padding:34px 0; }
+.center-msg-b .cm-sub{ font-size:24px; color:var(--gray-700); margin:0 0 14px; }
+.center-msg-b .cm-title{ font-size:64px; margin-bottom:32px; }
+.center-msg-b .callout{ font-size:24px; padding:28px 32px; margin-top:50px; }
+.center-msg-b .asset.center-art{ top:auto; bottom:40px; transform:none; width:380px; right:30px; }
+
+/* ===================================================================
+   [텍스트] 3요소 카드 (.three-card) — 리드 + 3장 카드(1장 포커스)
+   =================================================================== */
+.three-card .s-body-wrap{ width:620px; }
+.three-card-lead{ margin:0 0 16px; font-size:20px; line-height:1.65; color:var(--gray-700);
+  font-weight:600; white-space:nowrap; }
+.three-card-lead strong{ color:var(--cobalt); font-weight:800; }
+.stat3{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:10px 0 16px; }
+.stat3 .card{ padding:14px 14px 16px; }
+.stat3 .card b{ display:block; font-size:19px; color:var(--ink); font-weight:800; margin-bottom:3px; }
+.stat3 .card span{ font-size:13px; color:var(--gray-700); }
+.stat3 .card.focus{ border:2px solid var(--cobalt); background:#F5F8FF; }
+.focus-tag{ display:inline-block; margin-top:8px; font-size:11px; font-weight:800;
+  color:#fff !important; background:#F97316; border-radius:999px; padding:3px 11px; letter-spacing:.03em; }
+/* 세로 공간 채우기(카드 확대) */
+.three-card.center-v .stat3{ gap:16px; margin:14px 0 20px; }
+.three-card.center-v .stat3 .card{ padding:24px 18px 26px; }
+.three-card.center-v .stat3 .card b{ font-size:23px; margin-bottom:6px; }
+.three-card.center-v .stat3 .card span{ font-size:15px; white-space:nowrap; }
+
+/* ===================================================================
+   [텍스트] 표 (.tbl) — 좌측 표 + 우측 일러스트 거터
+   =================================================================== */
+.tbl .s-full{ left:64px; right:330px; top:118px; }
+.tbl > .asset{ position:absolute; right:24px; top:50%; transform:translateY(-50%); width:290px; }
+.tbl > .asset img{ width:100%; height:auto; display:block; }
+/* 5열 모델 표: 더 넓게 + 작은 글씨 + 코너 스팟 */
+.tbl.model .s-full{ right:206px; }
+.tbl.model table.t{ font-size:13px; }
+.tbl.model table.t th, .tbl.model table.t td{ padding:7px 9px; }
+.tbl.model > .asset{ right:18px; width:168px; top:46%; }
+.table-cap{ margin-top:14px; }
+/* 표를 세로로 키워 캔버스 채움(넉넉한 행) */
+.tbl.canvas-fill table.t{ font-size:17px; }
+.tbl.canvas-fill table.t td, .tbl.canvas-fill table.t th{ padding:14px 14px; }
+/* 표 아래 3-노트 카드(선택) */
+.note-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px; }
+.note{ border:1px solid var(--line); border-radius:18px; background:#fff;
+  padding:18px 18px 16px; box-shadow:0 8px 18px rgba(20,24,33,.045); }
+.note b{ display:block; margin-bottom:8px; color:var(--ink); font-size:18px; font-weight:800; }
+.note p{ margin:0; color:var(--gray-700); font-size:15px; line-height:1.5; word-break:keep-all; }
+.note strong{ color:var(--orange-bold); font-weight:800; }
+/* 표 아래 태그 행(선택) */
+.tag-block{ margin-top:22px; }
+.tag-block-label{ display:block; font-size:14px; font-weight:800; color:var(--gray-700); margin-bottom:10px; }
+.tag-row{ display:flex; flex-wrap:wrap; gap:10px; }
+.tag-row .pill{ font-size:15px; padding:9px 16px; color:var(--cobalt); border-color:var(--blue-soft); background:var(--blue-soft); }
+
+/* ===================================================================
+   [텍스트] 카드 그리드 (.card-grid) — 4×2 훑기 카드 (표 대체)
+   =================================================================== */
+.card-grid .s-full{ position:absolute; left:64px; right:64px; top:118px; bottom:54px;
+  display:flex; flex-direction:column; }
+.revenue-grid{ flex:1 1 auto; display:grid; grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(2,minmax(0,1fr)); gap:16px; margin-top:14px; align-content:stretch; }
+.rev-card{ border:1px solid var(--line); border-radius:20px; background:#fff;
+  padding:20px 20px 18px; box-shadow:0 10px 24px rgba(20,24,33,.055); display:flex;
+  flex-direction:column; min-height:0; }
+.rev-card.principle{ background:var(--blue-soft); border:2px solid var(--cobalt); }
+.rev-top{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.rev-no{ flex:0 0 auto; width:34px; height:34px; border-radius:50%; background:var(--cobalt);
+  color:#fff; display:grid; place-items:center; font-size:14px; font-weight:800; }
+.rev-card h3{ margin:0; font-size:22px; color:var(--ink); font-weight:800; line-height:1.18; }
+.rev-card p{ margin:0; font-size:15px; line-height:1.46; color:var(--gray-700); }
+.rev-card p::before{ display:inline-block; margin-right:7px; padding:2px 8px; border-radius:999px;
+  background:var(--surface); color:var(--gray-700); font-size:11px; font-weight:800; vertical-align:1px; }
+.rev-card p:first-of-type::before{ content:"뜻"; }
+.rev-card .fit{ margin-top:10px; color:var(--cobalt); font-weight:700; }
+.rev-card .fit::before{ content:"잘 맞는 곳"; color:var(--cobalt); background:var(--blue-soft); }
+.rev-card .metric{ margin-top:auto; padding:8px 0 0; color:var(--gray-400); font-size:14px;
+  border:0; border-radius:0; background:transparent; box-shadow:none; display:block; }
+.rev-card .metric::before{ content:"봐야 할 숫자"; color:var(--gray-700); background:var(--surface); }
+.rev-card.principle p::before{ content:"핵심"; color:#fff; background:var(--cobalt); }
+.card-grid .table-cap{ margin:14px 0 0; font-size:18px; padding:16px 20px; }
+/* 8칸(4×2) 확장 그리드: .wide-12 */
+.card-grid.wide-12 .revenue-grid{ flex:0 0 auto; height:364px;
+  grid-template-columns:repeat(12,1fr); grid-template-rows:repeat(2,minmax(0,1fr)); }
+.card-grid.wide-12 .revenue-grid .rev-card:nth-child(-n+4){ grid-column:span 3; }
+.card-grid.wide-12 .revenue-grid .rev-card:nth-child(n+5){ grid-column:span 4; }
+.card-grid.wide-12 .rev-card{ padding:16px 18px 14px; }
+.card-grid.wide-12 .rev-card h3{ font-size:20px; }
+.card-grid.wide-12 .rev-card p{ font-size:14px; line-height:1.42; }
+.card-grid.wide-12 .rev-card .metric{ font-size:13px; padding-top:7px; }
+
+/* ===================================================================
+   [텍스트] 리마인드 스택 (.remind-slide) — 기울어진 사진 2장
+   =================================================================== */
+.remind-slide .s-body-wrap{ width:650px; }
+.remind-stack{ position:absolute; right:52px; top:50%; transform:translateY(-50%);
+  width:420px; height:340px; }
+.remind-stack .ri{ position:absolute; width:370px;
+  border-radius:10px; border:1px solid rgba(0,0,0,.07);
+  box-shadow:0 6px 24px rgba(0,0,0,.18); }
+.remind-stack .ri-back{ transform:rotate(-6deg); bottom:0; left:0; }
+.remind-stack .ri-front{ transform:rotate(3.5deg); top:18px; right:0; }
+
+/* ===================================================================
+   [도형] 벤 다이어그램 동심원 (.venn-slide) — 포함 관계 (원본 9페이지 S07)
+   =================================================================== */
+.venn-slide .s-body-wrap{ top:112px; bottom:54px; height:auto;
+  display:flex; flex-direction:column; }
+.venn-slide .s07-def{ margin-top:32px; }
+.venn-wrap{ position:absolute; right:36px; top:170px; width:480px; height:480px; }
+.venn-outer{ position:relative; width:480px; height:480px; border-radius:50%;
+  border:3px solid var(--cobalt); background:var(--blue-soft); }
+.venn-outer-label{ position:absolute; top:-18px; left:50%; transform:translateX(-50%);
+  display:inline-flex; white-space:nowrap; background:var(--cobalt); color:#fff;
+  font-weight:800; font-size:17px; border-radius:999px; padding:7px 18px;
+  box-shadow:0 8px 18px rgba(48,96,195,.35); }
+.venn-tag{ position:absolute; transform:translate(-50%,-50%); display:inline-flex; align-items:center;
+  background:#fff; border:1px solid var(--line); color:var(--gray-700); font-weight:700;
+  font-size:15px; border-radius:999px; padding:7px 15px; white-space:nowrap; }
+.venn-tag.t1{ left:343px; top:98px; }
+.venn-tag.t2{ left:406px; top:294px; }
+.venn-tag.t3{ left:240px; top:415px; }
+.venn-tag.t4{ left:74px;  top:294px; }
+.venn-tag.t5{ left:137px; top:98px; }
+.venn-inner{ position:absolute; left:240px; top:240px; transform:translate(-50%,-50%);
+  width:195px; height:195px; border-radius:50%; background:var(--cobalt);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; box-shadow:0 14px 32px rgba(48,96,195,.4); }
+.venn-inner-label{ color:#fff; font-weight:800; font-size:24px; }
+.venn-inner-sub{ color:#DCE9FF; font-weight:700; font-size:13px; margin-top:5px; }
+
+/* ===================================================================
+   [도형] 역기획 보드 (.reverse-slide) — 4스텝 카드 + 우측 일러스트
+   =================================================================== */
+.reverse-slide .s-full{ right:64px; bottom:54px; display:flex; flex-direction:column; }
+.reverse-slide .timing{ align-self:flex-start; }
+.reverse-note{ margin:0; font-size:17px; color:var(--gray-700); }
+.reverse-board{ flex:1 1 auto; display:grid; grid-template-columns:1.1fr .9fr;
+  gap:26px; align-items:center; }
+.reverse-steps{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.reverse-card{ min-height:132px; border:1px solid var(--line); border-radius:18px;
+  background:#fff; padding:18px 18px 16px; box-shadow:0 10px 24px rgba(20,24,33,.05); }
+.reverse-card .step{ display:inline-flex; align-items:center; justify-content:center;
+  width:30px; height:30px; border-radius:50%; background:var(--cobalt); color:#fff;
+  font-size:14px; font-weight:800; margin-bottom:12px; }
+.reverse-card h3{ margin:0 0 8px; font-size:20px; color:var(--ink); font-weight:800; }
+.reverse-card p{ margin:0; font-size:16px; line-height:1.5; color:var(--gray-700); word-break:keep-all; }
+.reverse-card strong{ color:var(--cobalt); }
+.reverse-visual{ position:relative; min-height:380px; display:grid; place-items:center; }
+.reverse-visual img{ width:390px; max-width:100%; }
+
+/* ===================================================================
+   [도형] 액터 분리 (.actor-slide) — 2주체 대비 + 배경 일러스트
+   =================================================================== */
+.actor-slide .s-body-wrap{ width:560px; top:118px; z-index:2; }
+.actor-slide .s-title{ font-size:48px; margin-bottom:20px; }
+.actor-slide .s-body{ font-size:21px; line-height:1.68; }
+.actor-pair{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0 16px; }
+.actor-card{ border:1px solid var(--line); border-radius:18px; background:#fff;
+  padding:20px 20px 18px; }
+.actor-card b{ display:block; color:var(--cobalt); font-size:24px; margin-bottom:8px; }
+.actor-card span{ display:block; color:var(--gray-700); font-size:17px; line-height:1.48; }
+.actor-rule{ margin:0 0 14px; font-size:20px; line-height:1.6; color:var(--gray-700); }
+.actor-rule strong{ color:var(--cobalt); font-weight:800; }
+.actor-slide .callout{ font-size:19px; padding:20px 22px; }
+.actor-visual{ position:absolute; right:8px; bottom:34px; width:660px; z-index:1; }
+
+/* ===================================================================
+   [도형] 흐름/스텝 (.flow-slide) — 좌 본문 + 스텝 카드 + 배경 일러스트
+   =================================================================== */
+.flow-slide .s-body-wrap{ width:620px; top:106px; z-index:2; }
+.flow-slide .s-title{ font-size:43px; line-height:1.12; margin-bottom:12px; }
+.flow-slide .s-title .hl{ display:inline-block; white-space:nowrap; }
+.flow-lead{ margin:0 0 14px; font-size:19px; line-height:1.5; color:var(--gray-700); font-weight:600; }
+.flow-lead strong{ color:var(--cobalt); font-weight:800; }
+.flow-steps-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:20px 0; }
+.flow-step{ border:1px solid var(--line); border-radius:18px; background:#fff;
+  padding:22px 24px; box-shadow:0 8px 18px rgba(20,24,33,.045); }
+.flow-step .n{ display:inline-grid; place-items:center; width:30px; height:30px;
+  border-radius:50%; background:var(--cobalt); color:#fff; font-size:14px; font-weight:800; margin-bottom:9px; }
+.flow-step b{ display:block; margin-bottom:6px; color:var(--ink); font-size:19px; font-weight:800; }
+.flow-step span{ display:block; color:var(--gray-700); font-size:15.5px; line-height:1.5; }
+.flow-visual{ position:absolute; right:-2px; bottom:22px; width:650px; z-index:1; }
+/* 세로 1열 스텝(워크숍 지시) */
+.work-steps{ display:flex; flex-direction:column; gap:12px; margin:18px 0; }
+.work-step{ display:grid; grid-template-columns:42px 1fr; gap:13px; align-items:start;
+  border:1px solid var(--line); border-radius:18px; background:#fff; padding:14px 16px; }
+.work-step .n{ width:42px; height:42px; border-radius:50%; display:grid; place-items:center;
+  background:var(--cobalt); color:#fff; font-weight:800; }
+.work-step b{ display:block; font-size:18px; color:var(--ink); margin-bottom:3px; }
+.work-step span{ display:block; font-size:15px; line-height:1.45; color:var(--gray-700); }
+
+/* ===================================================================
+   [도형] 2열 비교 (.compare-slide) — 좌우 패널(한쪽 강조) + 하단 결론
+   =================================================================== */
+.compare-slide .s-full{ position:absolute; left:64px; right:64px; top:118px; bottom:54px;
+  display:flex; flex-direction:column; }
+.compare2{ flex:1 1 auto; display:grid; grid-template-columns:1fr 1fr; gap:22px;
+  align-content:center; margin:14px 0; }
+.cmp{ border:1px solid var(--line); border-radius:20px; padding:24px 26px; background:#fff;
+  display:flex; flex-direction:column; }
+.cmp.lean-cmp{ background:var(--blue-soft); border:2px solid var(--cobalt); }
+.cmp .tag{ align-self:flex-start; font-size:12px; font-weight:800; color:#fff;
+  background:var(--gray-400); border-radius:999px; padding:3px 12px; margin-bottom:10px; }
+.cmp.lean-cmp .tag{ background:var(--cobalt); }
+.cmp h3{ margin:0 0 4px; font-size:26px; font-weight:800; color:var(--ink); }
+.cmp .sub{ font-size:13px; color:var(--gray-400); font-weight:600; margin:0 0 14px; }
+.cmp-lines{ display:flex; flex-direction:column; gap:9px; margin:0; }
+.cmp-lines p{ margin:0; font-size:15px; line-height:1.6; color:var(--gray-700);
+  padding:0 0 0 14px; border-left:3px solid #DCE4FF; }
+.cmp-lines strong{ color:var(--cobalt); }
+.compare-foot{ font-size:17px; }
+
+/* ===================================================================
+   [도형] 린캔버스 9칸 (.lean-slide) — 9칸 그리드 보드
+   =================================================================== */
+.lean-slide .s-full > .lean{ flex:1 1 auto; min-height:0; margin-top:12px; }
+.lean-slide .s-title{ margin:0 0 4px; }
+.lean{ display:grid; grid-template-columns:repeat(10,1fr);
+  grid-template-rows:1fr 1fr 0.82fr; gap:8px; }
+.lc{ border:1px solid var(--line); border-radius:12px; padding:11px 13px;
+  background:#fff; display:flex; flex-direction:column; overflow:hidden; min-height:0; }
+.lc .lc-h{ display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.lc .lc-n{ flex:0 0 auto; width:22px; height:22px; border-radius:50%;
+  background:var(--cobalt); color:#fff; font-weight:800; font-size:12px;
+  display:grid; place-items:center; }
+.lc h4{ margin:0; font-size:14px; font-weight:800; color:var(--ink); line-height:1.15; word-break:keep-all; }
+.lc p{ margin:0; font-size:11.5px; line-height:1.42; color:var(--gray-700); word-break:keep-all; }
+.lc.key{ background:#F4F8FF; border:2px solid var(--cobalt); }
+.lc.key .lc-n{ background:var(--orange); }
+.lc .today{ display:inline-block; margin-top:auto; font-size:10px; font-weight:800;
+  color:#fff; background:var(--orange); border-radius:999px; padding:1px 7px; align-self:flex-start; }
+.lc-problem { grid-column:1/3;  grid-row:1/3; }
+.lc-solution{ grid-column:3/5;  grid-row:1/2; }
+.lc-metrics { grid-column:3/5;  grid-row:2/3; }
+.lc-uvp     { grid-column:5/7;  grid-row:1/3; background:var(--blue-soft); border-color:#DCE4FF; }
+.lc-advan   { grid-column:7/9;  grid-row:1/2; }
+.lc-channel { grid-column:7/9;  grid-row:2/3; }
+.lc-customer{ grid-column:9/11; grid-row:1/3; }
+.lc-cost    { grid-column:1/6;  grid-row:3/4; }
+.lc-revenue { grid-column:6/11; grid-row:3/4; }
+
+/* ===================================================================
+   [도형] 가정-위험-검증 (.risk-slide) — 3단 세로 보드 + 일러스트
+   =================================================================== */
+.risk-slide .s-full{ position:absolute; left:64px; right:64px; top:118px; bottom:54px;
+  display:flex; flex-direction:column; }
+.risk-lead{ margin:0 0 16px; font-size:19px; line-height:1.5; color:var(--gray-700); font-weight:600; }
+.risk-lead strong{ color:var(--cobalt); font-weight:800; }
+.risk-layout{ flex:1 1 auto; display:grid; grid-template-columns:1fr 430px; gap:28px; align-items:center; }
+.risk-grid{ display:grid; grid-template-columns:1fr; gap:4px; }
+.risk-card{ display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:center;
+  border:1px solid var(--line); border-radius:18px; background:#fff; padding:16px 18px; }
+.risk-card .label{ border-radius:999px; padding:7px 12px; text-align:center;
+  background:var(--blue-soft); color:var(--cobalt); font-size:14px; font-weight:800; }
+.risk-card.warn .label{ background:var(--orange-soft); color:var(--orange-bold); }
+.risk-card b{ display:block; font-size:19px; color:var(--ink); margin-bottom:4px; }
+.risk-card span{ display:block; font-size:15px; line-height:1.45; color:var(--gray-700); }
+.risk-arrow{ text-align:center; color:var(--gray-400); font-size:18px; font-weight:800; margin:2px 0; }
+.risk-visual img{ width:430px; display:block; }
+
+/* ===================================================================
+   [도형] 지표 인포그래픽 (.metric-slide) — 5지표 카드 행 + 비율 공식
+   =================================================================== */
+.metric-slide .s-full > .metric-wrap{ flex:1 1 auto; display:flex;
+  flex-direction:column; justify-content:center; gap:18px; margin-top:6px; }
+.metric-row{ display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+.metric{ border:1px solid var(--line); border-radius:18px; padding:18px 18px 16px;
+  background:#fff; display:flex; flex-direction:column; }
+.metric .ico{ font-size:30px; line-height:1; margin-bottom:8px; }
+.metric .abbr{ font-size:24px; font-weight:800; color:var(--cobalt); line-height:1.1; }
+.metric .full{ font-size:12px; color:var(--gray-400); font-weight:600; margin-bottom:10px; }
+.metric .mean{ font-size:14px; color:var(--gray-700); line-height:1.5; margin-bottom:12px; }
+.metric .q{ margin-top:auto; font-size:13px; font-weight:800; color:var(--cobalt);
+  background:var(--blue-soft); border-radius:999px; padding:6px 12px; align-self:flex-start; }
+.ratio{ display:flex; align-items:center; gap:20px; background:#EAF0FF;
+  border:2px solid #CDDBFF; border-radius:18px; padding:16px 26px; }
+.ratio .formula{ font-size:30px; font-weight:800; color:var(--cobalt); white-space:nowrap; }
+.ratio .formula .op{ color:var(--gray-400); margin:0 6px; }
+.ratio .say{ font-size:17px; font-weight:700; color:var(--ink); }
+.ratio .say b{ color:var(--cobalt); }
+.ratio .say small{ display:block; font-size:13px; font-weight:500; color:var(--gray-700); margin-top:2px; }
+
+/* ===================================================================
+   [도형] 모델→지표 매핑 (.map-slide) — 4열 매핑 카드
+   =================================================================== */
+.map-slide .s-full{ position:absolute; left:64px; right:64px; top:118px; bottom:54px;
+  display:flex; flex-direction:column; }
+.pick-lead{ font-size:18px; color:var(--gray-700); margin:6px 0 0; }
+.pick-lead strong{ color:var(--cobalt); }
+.map-row{ flex:1 1 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:18px;
+  align-content:center; margin:16px 0; }
+.mapc{ border:1px solid var(--line); border-radius:18px; overflow:hidden; text-align:center;
+  display:flex; flex-direction:column; background:#fff; min-height:230px; }
+.mapc .m-model{ background:var(--surface); font-size:17px; font-weight:800; color:var(--ink); padding:14px 10px; }
+.mapc .m-arrow{ font-size:20px; color:var(--gray-400); padding:8px 0 2px; }
+.mapc .m-metric{ font-size:22px; font-weight:800; color:var(--cobalt); padding:6px 10px 4px; }
+.mapc .m-metric small{ display:block; font-size:12px; font-weight:600; color:var(--gray-400); }
+.mapc .m-why{ margin:6px 0 0; padding:12px 16px 20px; font-size:14.5px; line-height:1.5;
+  color:var(--gray-700); border-top:1px solid var(--line); text-align:left; }
+.mapc .m-why strong{ color:var(--cobalt); font-weight:800; }
+.pick-note{ font-size:16px; line-height:1.5; color:var(--ink); background:var(--blue-soft);
+  border-left:5px solid var(--cobalt); border-radius:12px; padding:16px 20px; margin:0; }
+.pick-note strong{ color:var(--cobalt); }
+
+/* ===================================================================
+   [도형] 가격 조사법 (.price-slide) — 2카드 상세 설명
+   =================================================================== */
+.pricing-methods{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+.pricing-method{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+.pricing-method b{ display:block; font-size:17px; color:var(--cobalt); margin-bottom:6px; }
+.pricing-method span{ display:block; font-size:14px; line-height:1.55; color:var(--gray-700); }
+.price-detail{ bottom:54px; display:flex; flex-direction:column; }
+.price-detail .s-title{ margin-bottom:18px; }
+.price-method-grid{ flex:1 1 auto; display:grid; grid-template-columns:1fr 1fr; gap:22px; align-content:center; }
+.price-detail-card{ background:#fff; border:1px solid var(--line); border-radius:20px;
+  padding:26px 28px; box-shadow:0 12px 28px rgba(20,24,33,.06); }
+.price-detail-card h3{ margin:12px 0 18px; color:var(--ink); font-size:28px; line-height:1.22; }
+.method-tag{ display:inline-flex; align-items:center; color:#fff; background:var(--cobalt);
+  border-radius:999px; padding:6px 14px; font-size:13px; font-weight:800; }
+.method-lines{ display:flex; flex-direction:column; gap:12px; }
+.method-lines p{ margin:0; display:grid; grid-template-columns:104px 1fr; gap:12px;
+  border-top:1px solid var(--line); padding-top:12px; font-size:17px; line-height:1.55; }
+.method-lines strong{ color:var(--cobalt); font-weight:800; }
+.method-lines span{ color:var(--gray-700); }
+.price-detail .callout{ margin:18px 0 0; font-size:18px; }
+
+/* ===================================================================
+   [클로징] 개념 정리 인포그래픽 (.concept-recap) — 배경 이미지 + 플로우 + 카드
+   =================================================================== */
+.concept-recap{ background:#F8FBFF; }
+.concept-recap .concept-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.concept-recap .s-head{ z-index:2; }
+.concept-panel{ position:absolute; z-index:1; left:64px; top:116px; width:700px; }
+.concept-panel .s-eyebrow{ color:var(--cobalt); margin-bottom:12px; }
+.concept-panel .s-title{ font-size:52px; line-height:1.12; margin:0 0 16px; color:var(--black); }
+.concept-panel .s-title .hl{ color:var(--cobalt); }
+.concept-lead{ width:640px; margin:0 0 20px; font-size:21px; line-height:1.6; color:var(--gray-700); font-weight:600; }
+.concept-lead strong{ color:var(--cobalt); font-weight:800; }
+.concept-flow{ display:flex; align-items:center; gap:8px; width:690px; margin:0 0 18px; }
+.concept-flow span{ flex:1; text-align:center; border-radius:999px; padding:11px 12px;
+  background:rgba(238,242,255,.92); border:1px solid #DCE4FF; color:var(--cobalt);
+  font-size:16px; font-weight:800; box-shadow:0 8px 18px rgba(48,96,195,.06); }
+.concept-flow b{ color:var(--gray-400); font-size:20px; }
+.concept-cards{ width:690px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.concept-card{ min-height:116px; border:1px solid rgba(229,232,240,.95); border-radius:18px;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(4px); padding:17px 18px;
+  box-shadow:0 10px 24px rgba(20,24,33,.05); }
+.concept-card h3{ margin:0 0 8px; font-size:21px; line-height:1.22; color:var(--ink); font-weight:800; }
+.concept-card p{ margin:0; font-size:15.5px; line-height:1.48; color:var(--gray-700); }
+.concept-card strong{ color:var(--cobalt); font-weight:800; }
+.concept-bottom{ margin-top:14px; width:690px; border-radius:18px; padding:16px 20px;
+  color:#fff; background:var(--cobalt); font-size:21px; line-height:1.35; font-weight:800;
+  box-shadow:0 14px 30px rgba(48,96,195,.24); }
+.concept-bottom small{ display:block; margin-top:4px; font-size:14px; color:#DCE9FF; font-weight:600; }

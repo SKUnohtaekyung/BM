@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <!-- ✏️ 덱 제목 -->
+  <title>강의덱 제목 — SKU LIKELION</title>
+  <link rel="icon" type="image/png" href="../img/logo.png">
+  <link rel="shortcut icon" type="image/png" href="../img/logo.png">
+  <!-- 폰트: Pretendard (한글) — 유일한 외부 의존성 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <!-- 디자인 시스템 + 레이아웃 모듈 -->
+  <link rel="stylesheet" href="../styles/deck.css">
+  <!--
+    ┌──────────────────────────────────────────────────────────────┐
+    │  새 덱 만드는 법                                                │
+    │  1) 이 파일을 새 폴더로 복사하고 옆에 img/ 폴더를 둡니다.        │
+    │     (이미지 경로 ../img/ → img/ 로 바꾸세요)                 │
+    │  2) 고정 1·2·3(표지·도입·아젠다) 텍스트를 우리 강의로 교체.      │
+    │  3) 본문은 layouts/카탈로그.html 에서 필요한 <section>을 복사해  │
+    │     아래 "본문 슬롯"에 붙여넣고 내용을 채웁니다.                 │
+    │  4) 파트 수만큼 part-divider 를 배치(진행 도트 is-active 이동).  │
+    │  5) 상황→레이아웃 선택은 00_레이아웃-선택가이드.md 참고.         │
+    │  배포: 이미지를 base64 로 인라인 → 단일 .html (README 참고).     │
+    └──────────────────────────────────────────────────────────────┘
+  -->
+</head>
+<body>
+  <div class="deck">
+
+    <!-- ============ 1 · 표지 (Cover) ============ -->
+    <section class="slide cover" data-slide="S01">
+      <header class="s-head cover-head">
+        <img class="s-logo" src="../img/logo.png" alt="">
+        <div class="brand-stack">
+          <span class="s-brand on-dark">SKU LIKELION</span>
+          <span class="track"><b class="ux">UX/UI</b> TRACK</span>
+        </div>
+        <div class="s-team on-dark">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="cover-title">
+        <div class="week">WEEK 00.</div>            <!-- ✏️ 주차 -->
+        <h1 class="ko">강의 제목</h1>                 <!-- ✏️ 한글 타이틀 -->
+      </div>
+      <img class="cover-asset" src="../img/main-tiles.png" alt="">   <!-- ✏️ 표지 이미지 -->
+      <div class="cover-presenter">발표자 이름</div>  <!-- ✏️ 발표자 -->
+    </section>
+
+    <!-- ============ 2 · 도입 (Intro) ============ -->
+    <section class="slide s02-slide" data-slide="S02">
+      <header class="s-head">
+        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">00주차 기획시간!</p>          <!-- ✏️ -->
+        <h2 class="s-title">오늘의 주제 한 줄</h2>          <!-- ✏️ -->
+        <p class="s-lead">핵심 질문을 여기에 던집니다.</p>   <!-- ✏️ -->
+        <div class="s-body">
+          오늘 이 시간에 무엇을<br>
+          어떤 순서로 다루는지<br>
+          한두 문장으로 소개합니다.
+        </div>
+      </div>
+      <img class="asset s02" src="../img/slides/s02_bm-puzzle.png" alt="">   <!-- ✏️ 도입 3D -->
+    </section>
+
+    <!-- ============ 3 · 아젠다 (Agenda) ============ -->
+    <section class="slide s03-slide" data-slide="S03">
+      <header class="s-head">
+        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <h2 class="s-title">오늘 배우게 될 것</h2>
+        <div class="accent-bar"></div>
+        <div class="s-body">
+          이 세션을 왜 하는지<br>
+          한 문단으로 짧게<br>
+          정리해 둡니다
+        </div>
+      </div>
+      <div class="s03-list">
+        <div class="agenda-item"><div class="num-circle">1</div><div><h3>아젠다 1</h3><p>한 줄 설명</p></div></div>
+        <div class="agenda-item"><div class="num-circle">2</div><div><h3>아젠다 2</h3><p>한 줄 설명</p></div></div>
+        <div class="agenda-item"><div class="num-circle">3</div><div><h3>아젠다 3</h3><p>한 줄 설명</p></div></div>
+        <div class="agenda-item"><div class="num-circle">4</div><div><h3>아젠다 4</h3><p>한 줄 설명</p></div></div>
+      </div>
+    </section>
+
+    <!-- ============ PART 1 전환 (part-divider) ============ -->
+    <section class="slide part-divider" data-slide="P1">
+      <header class="s-head">
+        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="pd-wrap">
+        <div class="pd-dots">
+          <span class="pd-dot is-active">1</span>   <!-- ✏️ 현재 파트에 is-active -->
+          <span class="pd-dot">2</span>
+          <span class="pd-dot">3</span>
+          <span class="pd-dot">4</span>
+        </div>
+        <p class="pd-eyebrow">PART 1 / 4</p>
+        <h2 class="pd-title">파트 제목</h2>
+        <p class="pd-sub">이 파트에서 다루는 것 한 줄</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ▼▼▼ 본문 슬롯 ▼▼▼
+         layouts/카탈로그.html 에서 원하는 레이아웃 <section>을 복사해
+         이 아래에 붙여넣고 내용을 채우세요. (예시 1장은 지워도 됨)
+         상황→레이아웃 선택: 00_레이아웃-선택가이드.md
+         ============================================================ -->
+
+    <!-- [예시] 본문+일러스트 (center-v) — 지우고 시작하세요 -->
+    <section class="slide center-v" data-slide="B01">
+      <header class="s-head">
+        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap">
+        <p class="s-eyebrow">PART 1 · 파트명</p>
+        <h2 class="s-title">이 슬라이드의 <span class="hl">결론</span>을 제목에</h2>
+        <div class="s-body">
+          <p>본문은 5줄을 넘기지 않습니다. 강조는 <strong>키워드 1~2개</strong>만 파랗게.</p>
+          <div class="callout blue"><strong>핵심</strong> — 한 슬라이드에 한 메시지.</div>
+        </div>
+      </div>
+      <img class="asset hero" src="../img/slides/s10_revenue-menu.png" alt="">
+    </section>
+
+    <!-- ▲▲▲ 본문 슬롯 끝 ▲▲▲ -->
+
+    <!-- ============ 클로징 (Closing) ============ -->
+    <section class="slide closing" data-slide="END">
+      <header class="s-head">
+        <img class="s-logo" src="../img/logo.png" alt=""><span class="s-brand">SKU LIKELION</span>
+        <span class="s-line"></span>
+        <div class="s-team">UX/UI Team<br>Official LIKELION&nbsp;&nbsp;at&nbsp;&nbsp;SKU</div>
+      </header>
+      <div class="s-body-wrap" style="top:250px;">
+        <h2 class="s-title">오늘의 <span class="hl">한 줄 요약</span></h2>
+        <div class="s-body">
+          <p>세션 전체를 한 문장으로 남기고,<br>다음 시간으로 이어지는 <strong>훅</strong>을 겁니다.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 방향키 리모컨 + PDF 버튼 -->
+  <div class="controls" id="controls">
+    <div class="navbar">
+      <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">‹</button>
+      <span class="nav-counter" id="counter">1 / 1</span>
+      <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">›</button>
+      <span class="nav-sep"></span>
+      <button class="nav-btn fs" id="fsBtn" aria-label="전체화면 (F)" title="전체화면 (F)">⛶</button>
+    </div>
+  </div>
+  <button class="dl-btn" id="dlBtn" onclick="window.print()">↓ PDF 다운로드</button>
+
+  <script>
+  (function(){
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var controls = document.getElementById('controls');
+    var counter  = document.getElementById('counter');
+    var prevBtn  = document.getElementById('prevBtn');
+    var nextBtn  = document.getElementById('nextBtn');
+    var fsBtn    = document.getElementById('fsBtn');
+    var dlBtn    = document.getElementById('dlBtn');
+    var idx = 0, hideTimer = null;
+    var storageKey = 'sku-deck-slide';   /* ✏️ 덱마다 고유 문자열로 바꾸면 위치 기억이 분리됨 */
+
+    function initialIndex(){
+      var m = String(location.hash || '').match(/slide=(\d+)/i);
+      if (m) return Math.max(0, parseInt(m[1], 10) - 1);
+      try {
+        var saved = parseInt(localStorage.getItem(storageKey), 10);
+        return isNaN(saved) ? 0 : saved;
+      } catch (e) { return 0; }
+    }
+    /* 슬라이드를 화면 크기에 맞게 축소/확대 (1280×720 기준) */
+    function fit(){
+      var s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+      document.documentElement.style.setProperty('--scale', s);
+    }
+    function show(i){
+      idx = Math.max(0, Math.min(slides.length - 1, i));
+      for (var n = 0; n < slides.length; n++){
+        slides[n].classList.toggle('is-active', n === idx);
+      }
+      counter.textContent = (idx + 1) + ' / ' + slides.length;
+      prevBtn.disabled = (idx === 0);
+      nextBtn.disabled = (idx === slides.length - 1);
+      dlBtn.style.display = (idx === 0) ? '' : 'none';  /* PDF 버튼은 표지에서만 */
+      try { localStorage.setItem(storageKey, String(idx)); } catch (e) {}
+    }
+    function next(){ show(idx + 1); }
+    function prev(){ show(idx - 1); }
+    function poke(){
+      controls.classList.add('show');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function(){ controls.classList.remove('show'); }, 1000);
+    }
+    function toggleFullscreen(){
+      if (!document.fullscreenElement){
+        (document.documentElement.requestFullscreen || function(){}).call(document.documentElement);
+      } else {
+        (document.exitFullscreen || function(){}).call(document);
+      }
+    }
+    document.addEventListener('keydown', function(e){
+      switch (e.key){
+        case 'ArrowRight': case 'PageDown': case ' ': case 'Spacebar':
+          next(); poke(); e.preventDefault(); break;
+        case 'ArrowLeft': case 'PageUp':
+          prev(); poke(); e.preventDefault(); break;
+        case 'Home': show(0); poke(); e.preventDefault(); break;
+        case 'End':  show(slides.length - 1); poke(); e.preventDefault(); break;
+        case 'f': case 'F': toggleFullscreen(); poke(); break;
+      }
+    });
+    prevBtn.addEventListener('click', function(){ prev(); poke(); });
+    nextBtn.addEventListener('click', function(){ next(); poke(); });
+    fsBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleFullscreen(); poke(); });
+    document.addEventListener('fullscreenchange', fit);
+    window.addEventListener('mousemove', poke);
+    window.addEventListener('resize', fit);
+    fit(); show(initialIndex()); poke();
+  })();
+  </script>
+</body>
+</html>
