@@ -482,7 +482,7 @@ table.t tr:nth-child(even) td{ background:#fcfdff; }
   border-radius:50%; background:var(--cobalt); color:#fff; font-size:14px; font-weight:800; margin-bottom:9px; }
 .flow-step b{ display:block; margin-bottom:6px; color:var(--ink); font-size:19px; font-weight:800; }
 .flow-step span{ display:block; color:var(--gray-700); font-size:15.5px; line-height:1.5; }
-.flow-visual{ position:absolute; right:-2px; bottom:22px; width:650px; z-index:1; }
+.flow-visual{ position:absolute; right:-2px; bottom:22px; width:560px; z-index:1; }
 /* 세로 1열 스텝(워크숍 지시) */
 .work-steps{ display:flex; flex-direction:column; gap:12px; margin:18px 0; }
 .work-step{ display:grid; grid-template-columns:42px 1fr; gap:13px; align-items:start;
